@@ -50,6 +50,8 @@ bld/
 .vscode/*
 .vs/
 tmp/
+bin/
+obj/
 
 # JetBrains Rider
 .idea/
