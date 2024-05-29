@@ -1,5 +1,5 @@
 import ApiAuthorzationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
-import { Users } from "./components/Users";
+import { Wallets } from "./Wallets";
 import { FetchData } from "./components/FetchData";
 import { Home } from "./components/Home";
 
@@ -10,12 +10,17 @@ const AppRoutes = [
   },
   {
     path: '/users',
-    element: <Users />
+    element: <Wallets />
   },
   {
     path: '/fetch-data',
     requireAuth: true,
     element: <FetchData />
+  },
+  {
+    path: '/wallets',
+    requireAuth: true,
+    element: <Wallets />
   },
   ...ApiAuthorzationRoutes
 ];

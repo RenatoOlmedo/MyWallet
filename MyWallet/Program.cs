@@ -1,7 +1,11 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using MyWallet.Data;
+using MyWallet.Interfaces;
 using MyWallet.Models;
+using MyWallet.Services;
+using Microsoft.AspNetCore.Identity;
+using MyWallet.Services.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,17 +15,23 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddIdentityServer()
-    .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+    .AddApiAuthorization<ApplicationUser, ApplicationDbContext>()
+    .AddProfileService<ProfileService>();
 
 builder.Services.AddAuthentication()
     .AddIdentityServerJwt();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+
+builder.Services.AddScoped<IWalletService, WalletService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<RoleInitializer>();
 
 var app = builder.Build();
 
@@ -50,5 +60,12 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 app.MapFallbackToFile("index.html"); ;
+
+using (var scope = app.Services.CreateScope())
+{
+    var serviceProvider = scope.ServiceProvider;
+    var roleInitializer = serviceProvider.GetRequiredService<RoleInitializer>();
+    await roleInitializer.InitializeAsync();
+}
 
 app.Run();
