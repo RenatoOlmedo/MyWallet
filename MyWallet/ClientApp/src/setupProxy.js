@@ -8,6 +8,8 @@ const context =  [
   "/weatherforecast",
   "/wallet",
   "/user",
+  "/swagger/index.html",
+  "/swagger",
   "/_configuration",
   "/.well-known",
   "/Identity",
