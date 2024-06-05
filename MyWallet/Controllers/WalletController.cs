@@ -53,10 +53,17 @@ public class WalletController : ControllerBase
 
     [HttpPost]
     [Route("CreateWallet")]
-    public async Task<IActionResult> CreateWallet([FromBody] Wallet wallet)
+    public async Task<IActionResult> CreateWallet([FromBody] WalletDTO wallet)
     {
-        await _walletService.CreateNewWalletAsync(wallet);
-        
-        return Ok();
+        try
+        {
+            await _walletService.CreateNewWalletAsync(wallet);
+
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest();
+        }
     }
 }

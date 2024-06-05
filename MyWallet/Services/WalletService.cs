@@ -47,7 +47,7 @@ public class WalletService : IWalletService
         
         var expectedOutcome = await _db.ExpectedOutcomes
             .Where(x => 
-                x.User == user 
+                x.Wallet == wallet 
                 && x.ReferenceDate == date)
             .ToListAsync();
 
@@ -138,8 +138,37 @@ public class WalletService : IWalletService
         return walletsDto;
     }
 
-    public async Task CreateNewWalletAsync(Wallet wallet)
+    public async Task CreateNewWalletAsync(WalletDTO wallet)
     {
-        await _db.Wallets.AddAsync(wallet);
+        var user = await _db.Users.FindAsync(wallet.UserId);
+
+        var operations = new List<Operation>();
+        
+        var newWallet = new Wallet
+        {
+            User = user,
+            ReferenceDate = wallet.ReferenceDate,
+            AmountInvested = wallet.AmountInvested,
+            Deposit = wallet.Deposit,
+            Withdraw = wallet.Withdraw,
+            Profit = wallet.Profit,
+            CurrentHeritage = wallet.CurrentHeritage
+        };
+        
+        wallet.Operations?.ForEach(x => operations.Add(
+            new Operation
+            {
+                Wallet = null,
+                Result = x.Result,
+                FinancialOperation = x.FinancialOperation,
+                Status = x.Status
+            }));
+
+        newWallet.Operations = operations;
+
+        await _db.Wallets.AddAsync(newWallet);
+        await _db.Operations.AddRangeAsync(operations);
+
+        await _db.SaveChangesAsync();
     }
 }
