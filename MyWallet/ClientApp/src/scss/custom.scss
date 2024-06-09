@@ -116,3 +116,39 @@ code {
     
   }
 }
+
+
+.light{
+  $corfundo:#ffffff;
+  $corheader: #fff;
+  $fonte:#000;
+  $border:#999;
+  $fundo-card:#fff;
+
+      header{
+      background-color: $corheader !important;
+      .navbar{
+        border: none !important;
+       a,li{
+        color: $fonte !important;
+       }
+      }
+    }
+
+
+  .fundo-body{
+    background-color:$corfundo ;
+    min-height: 100vh;
+    padding: 0;
+    margin: 0;
+    .card, .list-group-item{
+      background-color: $fundo-card;
+      border-color: $border;
+      p,ul,li,h5{
+        color:$fonte;
+      }
+    }
+  
+    
+  }
+}

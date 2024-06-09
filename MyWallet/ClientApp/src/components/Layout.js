@@ -15,8 +15,8 @@ export const Layout = (props) => {
                 <NavMenu/>
                 <Container fluid className="fundo-body">
                     <Container>
-                        <div onClick={switchDark} className={`switch-dark ${dark ? "dark" :"light"}`}></div>
                         <Row className="align-items-center">
+                        <div onClick={switchDark} className={`switch-dark mt-2 ${dark ? "dark" :"light"}`}></div>
                             {props.children}
                         </Row>
                     </Container>
