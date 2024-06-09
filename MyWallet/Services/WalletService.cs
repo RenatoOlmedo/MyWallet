@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyWallet.Data;
 using MyWallet.Interfaces;
+using MyWallet.Models;
 using MyWallet.Models.DTO;
 using MyWallet.Models.Enums;
 
@@ -13,7 +14,7 @@ public class WalletService : IWalletService
     public WalletService(ApplicationDbContext db)
         => _db = db;
     
-    public async Task<WalletViewDTO> getWalletByUserAndMonthAsync(string userId, DateTime date)
+    public async Task<WalletViewDTO> GetWalletByUserAndMonthAsync(string userId, DateTime date)
     {
         var user = await _db.Users
             .FindAsync(userId);
@@ -22,6 +23,7 @@ public class WalletService : IWalletService
             throw new KeyNotFoundException("Usuário não encontrado!");
         
         var wallet = await _db.Wallets
+            .Include(i => i.Operations)
             .FirstOrDefaultAsync(x => x.User == user && x.ReferenceDate == date);
 
         if (wallet is null)
@@ -45,7 +47,7 @@ public class WalletService : IWalletService
         
         var expectedOutcome = await _db.ExpectedOutcomes
             .Where(x => 
-                x.User == user 
+                x.Wallet == wallet 
                 && x.ReferenceDate == date)
             .ToListAsync();
 
@@ -59,12 +61,8 @@ public class WalletService : IWalletService
                         FinancialOperation = x.FinancialOperation,
                         Result = x.ExpectedResult
                     }));
-        
-        var operations = await _db.Operations
-            .Where(x => 
-                x.User == user 
-                && x.ReferenceDate == date)
-            .ToListAsync();
+
+        var operations = wallet.Operations;
 
         var completedOperations = operations
             .Where(x =>
@@ -123,7 +121,7 @@ public class WalletService : IWalletService
         return walletDTO;
     }
 
-    public List<WalletListViewDTO> getWalletListByUser(string userId)
+    public List<WalletListViewDTO> GetWalletListByUser(string userId)
     {
         var wallets = _db.Wallets.Where(x => x.User.Id == userId).OrderByDescending(x => x.ReferenceDate);
 
@@ -138,5 +136,39 @@ public class WalletService : IWalletService
         );
         
         return walletsDto;
+    }
+
+    public async Task CreateNewWalletAsync(WalletDTO wallet)
+    {
+        var user = await _db.Users.FindAsync(wallet.UserId);
+
+        var operations = new List<Operation>();
+        
+        var newWallet = new Wallet
+        {
+            User = user,
+            ReferenceDate = wallet.ReferenceDate,
+            AmountInvested = wallet.AmountInvested,
+            Deposit = wallet.Deposit,
+            Withdraw = wallet.Withdraw,
+            Profit = wallet.Profit,
+            CurrentHeritage = wallet.CurrentHeritage
+        };
+        
+        wallet.Operations?.ForEach(x => operations.Add(
+            new Operation
+            {
+                Wallet = null,
+                Result = x.Result,
+                FinancialOperation = x.FinancialOperation,
+                Status = x.Status
+            }));
+
+        newWallet.Operations = operations;
+
+        await _db.Wallets.AddAsync(newWallet);
+        await _db.Operations.AddRangeAsync(operations);
+
+        await _db.SaveChangesAsync();
     }
 }

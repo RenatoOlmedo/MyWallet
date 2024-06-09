@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyWallet.Interfaces;
+using MyWallet.Models;
 using MyWallet.Models.DTO;
 
 namespace MyWallet.Controllers;
@@ -47,14 +48,22 @@ public class WalletController : ControllerBase
         if (userId is null)
             return NoContent();
         
-        return Ok(_walletService.getWalletListByUser(userId));
+        return Ok(_walletService.GetWalletListByUser(userId));
     }
 
     [HttpPost]
     [Route("CreateWallet")]
-    public IActionResult CreateWallet([FromBody] WalletViewDTO wallet)
+    public async Task<IActionResult> CreateWallet([FromBody] WalletDTO wallet)
     {
+        try
+        {
+            await _walletService.CreateNewWalletAsync(wallet);
 
-        return Ok();
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest();
+        }
     }
 }

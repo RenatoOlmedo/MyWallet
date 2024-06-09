@@ -1,13 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace MyWallet.Models.DTO;
 
-namespace MyWallet.Models;
-
-public class Wallet
+public class WalletDTO
 {
-    [Key]
-    public string Id { get; set; } = Guid.NewGuid().ToString();
-    public ApplicationUser User { get; set; }
-    public List<Operation>? Operations { get; set; }
+    public string UserId { get; set; }
+    public List<OperationDTO>? Operations { get; set; }
     public DateTime ReferenceDate { get; set; }
     public decimal AmountInvested { get; set; }
     public decimal Deposit { get; set; }
