@@ -18,6 +18,68 @@ code {
   flex: 1;
 }
 
+.switch-dark{
+  position: relative;
+  width: 90px;
+  height: 30px;
+  border: 1px solid #999;
+  border-radius: 30px;
+  transition: all .3s;
+  cursor: pointer;
+
+
+  &.light{
+    background-color: #4a4a4a;
+
+    &::before{
+      content: "";
+      position: absolute;
+      width: 60%;
+      height: 100%;
+      background-color: #ccc;
+      border-radius: 30px;
+      right: 0;
+      top: 0;
+    }
+
+    &::after{
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: white;
+      right: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+  &.dark{
+    background-color: white;
+    &::before{
+      content: "";
+      position: absolute;
+      width: 60%;
+      height: 100%;
+      background-color: #ccc;
+      border-radius: 30px;
+      left: 0;
+      top: 0;
+    }
+
+    &::after{
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: #4a4a4a;
+      border-radius: 50%;
+      left: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+}
 
 
 .dark{

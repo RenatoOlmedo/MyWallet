@@ -1,26 +1,28 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { NavMenu } from './NavMenu';
-import { Container, Row } from 'reactstrap';
+import { Container, Row,Offcanvas,OffcanvasHeader,OffcanvasBody } from 'reactstrap';
 
-export class Layout extends Component {
-    static displayName = Layout.name;
+export const Layout = (props) => {
+        const [dark, setDark] = useState(true)
 
-    constructor(props) {
-        super(props);
-    }
+        function switchDark(){
+            setDark(!dark)
+        }
+    
 
-    render() {
         return (
-            <div className="dark">
+            <div className={dark ? "dark" : "light"}>
                 <NavMenu/>
                 <Container fluid className="fundo-body">
                     <Container>
+                        <div onClick={switchDark} className={`switch-dark ${dark ? "dark" :"light"}`}></div>
                         <Row className="align-items-center">
-                            {this.props.children}
+                            {props.children}
                         </Row>
                     </Container>
                 </Container>
             </div>
         );
-    }
+ 
+
 }
