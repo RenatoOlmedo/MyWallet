@@ -125,7 +125,7 @@ export const Home = () => {
             <p>{isUser}</p>
             {!isAdmin ? (
                 <div>
-                    <div className="row">
+                    <div className="row align-items-center">
                         <div className="col-lg-2 col-sm-6">
                             <Card title={"Cliente"} text={props.User} />
                         </div>

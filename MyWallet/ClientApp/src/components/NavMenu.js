@@ -38,19 +38,19 @@ export class NavMenu extends Component {
     
     return (
         <header>
-          <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3" container light>
+          <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow" container light>
             <NavbarBrand tag={Link} to="/">MyWallet</NavbarBrand>
             <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
             <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>
               <ul className="navbar-nav flex-grow">
                 {isUser &&
                   <NavItem>
-                    <NavLink tag={Link} className="text-dark" to="/">Wallet</NavLink>
+                    <NavLink tag={Link} className="" to="/">Wallet</NavLink>
                   </NavItem>
                 }
                 {isAdmin &&
                     <NavItem>
-                      <NavLink tag={Link} className="text-dark" to="/Users">Users</NavLink>
+                      <NavLink tag={Link} className="" to="/Users">Users</NavLink>
                     </NavItem>
                 }
                 <LoginMenu>

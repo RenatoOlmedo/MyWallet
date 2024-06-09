@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { NavMenu } from './NavMenu';
-import { Container } from 'reactstrap';
+import { Container, Row } from 'reactstrap';
 
 export class Layout extends Component {
     static displayName = Layout.name;
@@ -11,10 +11,14 @@ export class Layout extends Component {
 
     render() {
         return (
-            <div>
+            <div className="dark">
                 <NavMenu/>
-                <Container>
-                    {this.props.children}
+                <Container fluid className="fundo-body">
+                    <Container>
+                        <Row className="align-items-center">
+                            {this.props.children}
+                        </Row>
+                    </Container>
                 </Container>
             </div>
         );
