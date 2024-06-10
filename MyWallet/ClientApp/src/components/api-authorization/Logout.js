@@ -3,6 +3,7 @@ import { Component } from 'react';
 import authService from './AuthorizeService';
 import { AuthenticationResultStatus } from './AuthorizeService';
 import { QueryParameterNames, LogoutActions, ApplicationPaths } from './ApiAuthorizationConstants';
+import { redirect, useNavigate } from 'react-router-dom';
 
 // The main responsibility of this component is to handle the user's logout process.
 // This is the starting point for the logout process, which is usually initiated when a
@@ -10,11 +11,11 @@ import { QueryParameterNames, LogoutActions, ApplicationPaths } from './ApiAutho
 export class Logout extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       message: undefined,
       isReady: false,
-      authenticated: false
+      authenticated: false,
+      redirect: window
     };
   }
 
@@ -27,6 +28,7 @@ export class Logout extends Component {
         } else {
           // This prevents regular links to <app>/authentication/logout from triggering a logout
           this.setState({ isReady: true, message: "The logout was not initiated from within the page." });
+          // this.navigate
         }
         break;
       case LogoutActions.LogoutCallback:
@@ -34,6 +36,8 @@ export class Logout extends Component {
         break;
       case LogoutActions.LoggedOut:
         this.setState({ isReady: true, message: "You successfully logged out!" });
+        // navigate("/Identity/Account/Login")
+        window.location.href="/Identity/Account/Login"
         break;
       default:
         throw new Error(`Invalid action '${action}'`);

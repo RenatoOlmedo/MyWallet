@@ -5,6 +5,8 @@ import { News } from "./News";
 import BarChart from "./BarChart";
 import authService from "./api-authorization/AuthorizeService";
 import Calendar from './Calendar/Calendar';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const rowStyle = {
     marginTop: '20px',
@@ -51,10 +53,14 @@ const props = {
     ]
 };
 
-async function getWalletData(userId) {
-    const response = await fetch(`/wallet?id=${userId}&date=2024-05-05`);
-    return await response.json();
-}
+
+// Wallet?id=47c461ef-cbf3-4013-887a-0233b1568c6d&year=2024&month=6
+
+
+// async function getWalletData(userId) {
+//     const response = await fetch(`/Wallet?id=${userId}&date=2024-05-05`);
+//     return await response.json();
+// }
 
 async function getUsersData() {
     try {
@@ -73,24 +79,39 @@ export const Home = () => {
     const [isAdmin, setIsAdmin] = useState(false);
     const [isUser, setIsUser] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const [logado, setLogado] = useState(false);
+    const valorReducer = useSelector(state => state.valor)
+    const [response, setResponse] = useState("")
+    const navigate = useNavigate()
+
+    async function getWalletData(userId) {
+        const response = await fetch(`/Wallet?id=${userId}&year=2024&month=${valorReducer.valor}`);
+        console.log('response', response)
+        return await response.json();
+    }
 
     useEffect(() => {
         async function initialize() {
+            console.log("mes", valorReducer.valor)
             try {
                 const user = await authService.getUser();
                 console.log('User:', user);
                 if (user) {
+                    setLogado(true)
                     setUserId(user.sub);
                     const userRoles = await authService.getUserRoles();
-                    console.log('User Roles:', userRoles);
                     setIsAdmin(userRoles.includes('Admin'));
-                    setIsUser(userRoles.includes('User'));
-                    if (userId) {
-                        const walletData = await getWalletData(userId);
-                        console.log('Wallet Data:', walletData);
-                        setWalletData(walletData.user);
-                    }
+                    // setIsUser(userRoles.includes('User'));
+                    const walletData = await getWalletData(user.sub);
+                    setResponse(walletData);
+                    // if (userId) {
+                    //     setWalletData(walletData.user);
+                    // }
                 }
+                // else{
+                //     navigate("/Identity/Account/Login")
+                // }
+               
             } catch (error) {
                 console.error('Initialization error:', error);
             } finally {
@@ -98,19 +119,19 @@ export const Home = () => {
             }
         }
 
-        async function fetchUserData() {
-            try {
-                const userData = await getUsersData();
-                console.log('User Data:', userData);
-                setUserData(userData);
-            } catch (error) {
-                console.error('Fetch user data error:', error);
-            }
-        }
+        // async function fetchUserData() {
+        //     try {
+        //         const userData = await getUsersData();
+        //         console.log('User Data:', userData);
+        //         setUserData(userData);
+        //     } catch (error) {
+        //         console.error('Fetch user data error:', error);
+        //     }
+        // }
 
         initialize();
-        fetchUserData();
-    }, []);
+        // fetchUserData();
+    }, [valorReducer.valor]);
 
     const estiloPersonalizado = {
         flex: '1'
@@ -122,35 +143,38 @@ export const Home = () => {
 
     return (
         <>
-        <Calendar ></Calendar>
-            <p>{isAdmin}</p>
+        
+         {logado ?
+         <>
+          <p>{isAdmin}</p>
             <p>{isUser}</p>
             {!isAdmin ? (
                 <div>
                     <div className="row align-items-center">
                         <div className="col-lg-2 col-sm-6">
-                            <Card title={"Cliente"} text={props.User} />
+                            <Card title={"Cliente"} text={response.user} />
                         </div>
                         <div className="col-lg-2 col-sm-6">
-                            <Card title={"Valor Investido"} text={props.AmountInvested} />
+                            <Card title={"Valor Investido"} text={response.amountInvested} />
                         </div>
                         <div className="col-lg-2 col-sm-6">
-                            <Card title={"Depositos"} text={props.Deposit} />
+                            <Card title={"Depositos"} text={response.deposit} />
                         </div>
                         <div className="col-lg-2 col-sm-6">
-                            <Card title={"Saques"} text={props.Withdraw} />
+                            <Card title={"Saques"} text={response.withdraw} />
                         </div>
                         <div className="col-lg-2 col-sm-6">
-                            <Card title={"Lucros"} text={props.Profit} />
+                            <Card title={"Lucros"} text={response.profit} />
                         </div>
                         <div className="col-lg-2 col-sm-6">
-                            <Card title={"Patrimonio atual"} text={props.CurrentHeritage} />
+                            <Card title={"Patrimonio atual"} text={response.currentHeritage} />
                         </div>
                     </div>
                     <div className="row flex" style={rowStyle}>
                         <div className="col-lg-3 col-md-6 col-sm-6 d-flex flex-column">
                             <div style={estiloPersonalizado}>
-                                <Card title={"Mês"} text={props.Month} />
+                                {/* <Card title={"Mês"} text={props.Month} /> */}
+                                <Calendar ></Calendar>
                             </div>
                             <div style={estiloPersonalizado}>
                                 <Card title={"Resultado"} text={props.Result} />
@@ -182,6 +206,10 @@ export const Home = () => {
                     ))}
                 </ul>
             )}
+         </>
+        :
+        <div>Não logado</div>
+        }
         </>
     );
 };

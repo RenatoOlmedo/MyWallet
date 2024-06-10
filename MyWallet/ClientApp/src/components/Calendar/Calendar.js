@@ -18,7 +18,6 @@ const Calendar = ({valor, alterarValor}) => {
             payload:month
         })
         setMes(month)
-        console.log("mes", month)
     },[])
 
     function ChangeCalendar(valor) {
@@ -35,7 +34,7 @@ const Calendar = ({valor, alterarValor}) => {
 return(
     <>
      <div className="row justify-content-end m-0 p-0">
-        <div className="col-lg-2 col-md-6 col-12">
+        <div className="col-12 p-0">
         <select onChange={(e) =>ChangeCalendar(e.target.value)} className="select-calenda mt-3 form-select">
             {meses.map((item, index) => (
                 <option key={index} value={index + 1} selected={(index ) === mes}>{item}</option>

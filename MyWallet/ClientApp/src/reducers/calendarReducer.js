@@ -1,5 +1,7 @@
+const mes = new Date().getMonth();
+
 const initialState = {
-    valor : 0
+    valor : (mes + 1)
 }
 
 const valorReducer = (state = initialState, action)=>{
