@@ -2,7 +2,8 @@
 
 public class WalletListViewDTO
 {
-    public DateTime date { get; set; }
+    public int year { get; set; }
+    public int month { get; set; }
     public decimal result { get; set; }
     public string walletId { get; set; }
 }

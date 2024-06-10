@@ -19,15 +19,13 @@ public class WalletController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetWalletByUser([FromQuery] string id, [FromQuery] string date)
+    public async Task<IActionResult> GetWalletByUser([FromQuery] string id, [FromQuery] int year, [FromQuery] int month)
     {
         try
         {
-            var convertedDate = Convert.ToDateTime(date);
-            
-            //var result = await _walletService.getWalletByUserAndMonth(id, convertedDate);
+            var result = await _walletService.GetWalletByUserAndMonthAsync(id, year, month);
 
-            return Ok(new{User="Renato"});
+            return Ok(result);
         }
         catch (KeyNotFoundException e)
         {
@@ -59,6 +57,31 @@ public class WalletController : ControllerBase
         {
             await _walletService.CreateNewWalletAsync(wallet);
 
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest();
+        }
+    }
+
+    [HttpGet]
+    [Route("GetPeriodResult")]
+    public async Task<IActionResult> GetPeriodResult([FromQuery] string userId, [FromQuery] int year, [FromQuery] int month)
+    {
+        var periodResult = await _walletService.GetPeriodResultByUser(userId, year, month);
+
+        return Ok(periodResult);
+    }
+
+    [HttpPost]
+    [Route("CreatePeriodResul")]
+    public async Task<IActionResult> CreatePeriodResult([FromQuery] string userId, [FromBody] PeriodResultDTO periodResult)
+    {
+        try
+        {
+            await _walletService.CreatePeriodResult(userId, periodResult);
+            
             return Ok();
         }
         catch (Exception e)

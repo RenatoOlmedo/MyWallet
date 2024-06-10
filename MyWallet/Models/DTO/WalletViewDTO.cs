@@ -10,39 +10,26 @@ public class WalletViewDTO
     public decimal Profit { get; set; }
     public string Month { get; set; }
     public decimal Result { get; set; }
-    public List<CompletedOperation> CompletedOperations { get; set; }
-    public List<OnGoingOperation> OnGoingOperations { get; set; }
-    public List<SimplifiedExpectedOutcome> ExpectedOutcome { get; set; }
-    public List<SimplifiedNews> News { get; set; }
-    public List<PeriodResult> PeriodResults { get; set; }
+    public List<SimplifiedOperationDTO> CompletedOperations { get; set; }
+    public List<SimplifiedOperationDTO> OnGoingOperations { get; set; }
+    public List<SimplifiedOperationDTO> ExpectedOutcome { get; set; }
 }
 
-public class CompletedOperation
+public class SimplifiedOperationDTO
 {
     public string FinancialOperation { get; set; }
     public decimal Result { get; set; }
 }
 
-public class SimplifiedExpectedOutcome
-{
-    public string FinancialOperation { get; set; }
-    public decimal Result { get; set; }
-}
-
-public class SimplifiedNews
+public class SimplifiedNewsDTO
 {
     public string Title { get; set; }
     public string Body { get; set; }
 }
 
-public class OnGoingOperation
+public class PeriodResultDTO
 {
-    public string FinancialOperation { get; set; }
-    public decimal Result { get; set; }
-}
-
-public class PeriodResult
-{
-    public string Month { get; set; }
+    public int Year { get; set; }
+    public int Month { get; set; }
     public decimal Result { get; set; }
 }
