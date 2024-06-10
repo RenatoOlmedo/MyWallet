@@ -119,18 +119,18 @@ export const Home = () => {
             }
         }
 
-        // async function fetchUserData() {
-        //     try {
-        //         const userData = await getUsersData();
-        //         console.log('User Data:', userData);
-        //         setUserData(userData);
-        //     } catch (error) {
-        //         console.error('Fetch user data error:', error);
-        //     }
-        // }
+        async function fetchUserData() {
+            try {
+                const userData = await getUsersData();
+                console.log('User Data:', userData);
+                setUserData(userData);
+            } catch (error) {
+                console.error('Fetch user data error:', error);
+            }
+        }
 
         initialize();
-        // fetchUserData();
+        fetchUserData();
     }, [valorReducer.valor]);
 
     const estiloPersonalizado = {
