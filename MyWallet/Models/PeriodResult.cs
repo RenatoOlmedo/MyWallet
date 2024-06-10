@@ -6,7 +6,8 @@ public class PeriodResult
 {
     [Key]
     public string Id { get; set; } = Guid.NewGuid().ToString();
-    public Wallet Wallet { get; set; }
-    public DateTime ReferenceDate { get; set; }
+    public int Year { get; set; }
+    public int Month { get; set; }
     public decimal Result { get; set; }
+    public ApplicationUser User { get; set; }
 }
