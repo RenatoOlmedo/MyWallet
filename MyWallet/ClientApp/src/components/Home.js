@@ -4,6 +4,7 @@ import { CardList } from "./CardList";
 import { News } from "./News";
 import BarChart from "./BarChart";
 import authService from "./api-authorization/AuthorizeService";
+import Calendar from './Calendar/Calendar';
 
 const rowStyle = {
     marginTop: '20px',
@@ -121,6 +122,7 @@ export const Home = () => {
 
     return (
         <>
+        <Calendar ></Calendar>
             <p>{isAdmin}</p>
             <p>{isUser}</p>
             {!isAdmin ? (
