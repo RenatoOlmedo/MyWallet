@@ -56,6 +56,8 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+builder.Services.AddCors();
+
 builder.Services.AddScoped<IWalletService, WalletService>();
 builder.Services.AddScoped<INewsService, NewsService>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -86,6 +88,10 @@ else
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseCors(x => x.AllowAnyHeader()
+    .AllowAnyMethod()
+    .AllowCredentials()
+    .WithOrigins("https://localhost:44473"));
 
 app.UseAuthentication();
 app.UseIdentityServer();
