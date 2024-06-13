@@ -38,6 +38,49 @@ public class WalletController : ControllerBase
             return BadRequest(e);
         }
     }
+    
+    [HttpGet]
+    [Route("GetModal")]
+    public async Task<IActionResult> GetWalletModalByUser([FromQuery] string id, [FromQuery] int year, [FromQuery] int month)
+    {
+        try
+        {
+            var result = await _walletService.GetWalletModalByUserAndMonthAsync(id, year, month);
+
+            return Ok(result);
+        }
+        catch (KeyNotFoundException e)
+        {
+            Console.WriteLine(e);
+            return NoContent();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return BadRequest(e);
+        }
+    }
+    
+    [HttpPut]
+    public async Task<IActionResult> GetWalletModalByUser([FromBody] WalletDTO wallet)
+    {
+        try
+        {
+            await _walletService.UpdateWalletAsync(wallet);
+
+            return Ok();
+        }
+        catch (KeyNotFoundException e)
+        {
+            Console.WriteLine(e);
+            return NoContent();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return BadRequest(e);
+        }
+    }
 
     [HttpGet]
     [Route("listWallet")]

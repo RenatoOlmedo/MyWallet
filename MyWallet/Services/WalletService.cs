@@ -90,6 +90,217 @@ public class WalletService : IWalletService
         return walletDTO;
     }
 
+    public async Task<WalletDTO> GetWalletModalByUserAndMonthAsync(string userId, int year, int month)
+    {
+        var user = await _db.Users
+            .FindAsync(userId);
+
+        if (user is null)
+            throw new KeyNotFoundException("Usuário não encontrado!");
+        
+        var wallet = await _db.Wallets
+            .Include(i => i.Operations)
+            .Include(e => e.ExpectedOutcomes)
+            .FirstOrDefaultAsync(x => 
+                x.User == user 
+                && x.Year == year
+                && x.Month == month);
+
+        var operations = new List<OperationDTO>();
+        var expectedOutcome = new List<ExpectedOutcomeDTO>();
+        
+        var walletDto = new WalletDTO
+        {
+            WalletId = wallet.Id,
+            UserId = user.Id,
+            Year = wallet.Year,
+            Month = wallet.Month,
+            AmountInvested = wallet.AmountInvested,
+            Deposit = wallet.Deposit,
+            Withdraw = wallet.Withdraw,
+            Profit = wallet.Profit,
+            CurrentHeritage = wallet.CurrentHeritage
+        };
+        
+        wallet.Operations?.ForEach(x => operations.Add(
+            new OperationDTO
+            {
+                OperationId = x.Id,
+                Result = x.Result,
+                FinancialOperation = x.FinancialOperation,
+                Status = x.Status
+            }));
+        
+        wallet.ExpectedOutcomes?.ForEach(e => expectedOutcome.Add(
+            new ExpectedOutcomeDTO
+            {
+                ExpectedOutcomeId = e.Id,
+                ExpectedResult = e.ExpectedResult,
+                FinancialOperation = e.FinancialOperation
+            }));
+        
+        walletDto.Operations = operations;
+        walletDto.ExpectedOutcomes = expectedOutcome;
+        
+        return walletDto;
+    }
+
+    public async Task UpdateWalletAsync(WalletDTO wallet)
+    {
+        var walletDetails = await _db.Wallets
+            .Include(u => u.User)
+            .Include(e => e.ExpectedOutcomes)
+            .Include(o => o.Operations)
+            .Where(x => 
+                x.Id == wallet.WalletId
+                && x.User.Id == wallet.UserId)
+            .FirstAsync();
+        
+        if(walletDetails is null)
+            throw new KeyNotFoundException("Wallet não encontrada.");
+
+        UpdateWalletBasicProps(wallet, walletDetails);
+
+        var isRawWallet = !walletDetails.Operations.Any()
+                          && !walletDetails.ExpectedOutcomes.Any();
+
+        if (isRawWallet)
+        {
+            AddPropsToRawWallet(wallet, walletDetails);
+
+            _db.Wallets.Update(walletDetails);
+            await _db.SaveChangesAsync();
+            
+            return;
+        }
+
+        if (walletDetails.Operations.Any())
+        {
+            RemoveExtraOperations(wallet, walletDetails);
+            UpdateWalletOperations(wallet, walletDetails);
+        }
+
+        if (walletDetails.ExpectedOutcomes.Any())
+        {
+            RemoveExtraOutcomes(wallet, walletDetails);
+            UpdateWalletOutcomes(wallet, walletDetails);
+        }
+        
+        _db.Wallets.Update(walletDetails);
+        await _db.SaveChangesAsync();
+    }
+
+    private static void UpdateWalletOutcomes(WalletDTO wallet, Wallet walletDetails)
+    {
+        foreach (var expectedOutcomeDto in wallet.ExpectedOutcomes)
+        {
+            var existingExpectedOutcome =
+                walletDetails.ExpectedOutcomes.FirstOrDefault(eo => eo.Id == expectedOutcomeDto.ExpectedOutcomeId);
+
+            if (existingExpectedOutcome == null)
+            {
+                walletDetails.ExpectedOutcomes.Add(new ExpectedOutcome
+                {
+                    ExpectedResult = expectedOutcomeDto.ExpectedResult,
+                    FinancialOperation = expectedOutcomeDto.FinancialOperation
+                });
+            }
+            else
+            {
+                existingExpectedOutcome.ExpectedResult = expectedOutcomeDto.ExpectedResult;
+                existingExpectedOutcome.FinancialOperation = expectedOutcomeDto.FinancialOperation;
+            }
+        }
+    }
+
+    private static void UpdateWalletOperations(WalletDTO wallet, Wallet walletDetails)
+    {
+        foreach (var operationDto in wallet.Operations)
+        {
+            var existingOperation = walletDetails.Operations.FirstOrDefault(o => o.Id == operationDto.OperationId);
+
+            if (existingOperation == null)
+            {
+                walletDetails.Operations.Add(new Operation
+                {
+                    FinancialOperation = operationDto.FinancialOperation,
+                    Result = operationDto.Result,
+                    Status = operationDto.Status,
+                });
+            }
+            else
+            {
+                existingOperation.FinancialOperation = operationDto.FinancialOperation;
+                existingOperation.Result = operationDto.Result;
+                existingOperation.Status = operationDto.Status;
+            }
+        }
+    }
+
+    private static void RemoveExtraOutcomes(WalletDTO wallet, Wallet walletDetails)
+    {
+        var outcomesToRemove = walletDetails.ExpectedOutcomes
+            .Where(o =>
+                !wallet.ExpectedOutcomes
+                    .Any(wo =>
+                        wo.ExpectedOutcomeId == o.Id))
+            .ToList();
+
+        outcomesToRemove.ForEach(x =>
+            walletDetails.ExpectedOutcomes
+                .Remove(x));
+    }
+
+    private static void RemoveExtraOperations(WalletDTO wallet, Wallet walletDetails)
+    {
+        var operationsToRemove = walletDetails.Operations
+            .Where(o =>
+                !wallet.Operations
+                    .Any(wo =>
+                        wo.OperationId == o.Id))
+            .ToList();
+
+        operationsToRemove.ForEach(x =>
+            walletDetails.Operations
+                .Remove(x));
+    }
+
+    private static void UpdateWalletBasicProps(WalletDTO wallet, Wallet walletDetails)
+    {
+        walletDetails.Deposit = wallet.Deposit;
+        walletDetails.AmountInvested = wallet.AmountInvested;
+        walletDetails.CurrentHeritage = wallet.CurrentHeritage;
+        walletDetails.Withdraw = wallet.Withdraw;
+        walletDetails.Month = wallet.Month;
+        walletDetails.Profit = wallet.Profit;
+        walletDetails.Year = wallet.Year;
+    }
+
+    private static void AddPropsToRawWallet(WalletDTO wallet, Wallet walletDetails)
+    {
+        walletDetails.Operations = new List<Operation>();
+        walletDetails.ExpectedOutcomes = new List<ExpectedOutcome>();
+
+        foreach (var newOperation in wallet.Operations)
+        {
+            walletDetails.Operations.Add(new Operation
+            {
+                FinancialOperation = newOperation.FinancialOperation,
+                Result = newOperation.Result,
+                Status = newOperation.Status
+            });
+        }
+
+        foreach (var newOutcome in wallet.ExpectedOutcomes)
+        {
+            walletDetails.ExpectedOutcomes.Add(new ExpectedOutcome
+            {
+                ExpectedResult = newOutcome.ExpectedResult,
+                FinancialOperation = newOutcome.FinancialOperation
+            });
+        }
+    }
+
     public List<WalletListViewDTO> GetWalletListByUser(string userId)
     {
         var wallets = _db.Wallets
@@ -137,7 +348,6 @@ public class WalletService : IWalletService
         wallet.Operations?.ForEach(x => operations.Add(
             new Operation
             {
-                Wallet = newWallet,
                 Result = x.Result,
                 FinancialOperation = x.FinancialOperation,
                 Status = x.Status
@@ -146,7 +356,6 @@ public class WalletService : IWalletService
         wallet.ExpectedOutcomes?.ForEach(e => expectedOutcome.Add(
             new ExpectedOutcome
             {
-                Wallet = newWallet,
                 ExpectedResult = e.ExpectedResult,
                 FinancialOperation = e.FinancialOperation
             }));
