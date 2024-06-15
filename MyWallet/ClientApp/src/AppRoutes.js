@@ -2,6 +2,7 @@ import ApiAuthorzationRoutes from './components/api-authorization/ApiAuthorizati
 import { Wallets } from "./Wallets";
 import { FetchData } from "./components/FetchData";
 import { Home } from "./components/Home";
+import {UserWallet} from './components/Wallets/UserWallet'
 
 const AppRoutes = [
   {
@@ -18,9 +19,9 @@ const AppRoutes = [
     element: <FetchData />
   },
   {
-    path: '/wallets',
+    path: '/wallets/:id',
     requireAuth: true,
-    element: <Wallets />
+    element: <UserWallet />
   },
   ...ApiAuthorzationRoutes
 ];

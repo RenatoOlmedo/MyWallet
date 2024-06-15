@@ -177,7 +177,7 @@ export const Home = () => {
                                 <Calendar ></Calendar>
                             </div>
                             <div style={estiloPersonalizado}>
-                                <Card title={"Resultado"} text={props.Result} />
+                                <Card title={"Resultado"} text={response.result} />
                             </div>
                         </div>
                         <div className="col-lg-3 col-sm-6 d-flex flex-column">
@@ -202,7 +202,7 @@ export const Home = () => {
             ) : (
                 <ul className="list-group">
                     {userData.map((op, index) => (
-                        <li key={index} className="list-group-item"><a href={`/Wallets?userId=${op.userId}`}>{op.userName}</a></li>
+                        <li key={index} className="list-group-item"><a href={`/wallets/${op.userId}`}>{op.userName}</a></li>
                     ))}
                 </ul>
             )}

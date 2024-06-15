@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form, Col } from 'react-bootstrap';
+import { useParams } from 'react-router-dom';
 
 export const Wallets = () => {
     const [userId, setUserId] = useState('');
@@ -15,6 +16,8 @@ export const Wallets = () => {
         profit: '',
         operations: []
     });
+
+    const {id} = useParams()
     
     const [newOperation, setNewOperation] = useState({
         financialOperation: '',
@@ -23,11 +26,10 @@ export const Wallets = () => {
     });
 
     useEffect(() => {
-        const params = new URLSearchParams(window.location.search);
-        const userIdFromQuery = params.get('userId');
-        if (userIdFromQuery) {
-            setUserId(userIdFromQuery);
-            getWalletsData(userIdFromQuery);
+        
+        if (id) {
+            setUserId(id);
+            getWalletsData(id);
         }
     }, []);
 
@@ -35,6 +37,7 @@ export const Wallets = () => {
         try {
             const response = await fetch(`/wallet/listWallet?userId=${userId}`);
             const data = await response.json();
+            console.log(data)
             setData(data);
         } catch (error) {
             console.error('Failed to fetch wallet data:', error);

@@ -5,7 +5,7 @@ import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
 import { Layout } from './components/Layout';
 import {Provider} from 'react-redux'
 import { createStore } from 'redux';
-import './scss/custom.scss';
+import './scss/style.scss';
 import rootReducer from './reducers';
 
 
