@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyWallet.Interfaces;
-using MyWallet.Models;
 using MyWallet.Models.DTO;
 
 namespace MyWallet.Controllers;
@@ -62,7 +61,7 @@ public class WalletController : ControllerBase
     }
     
     [HttpPut]
-    public async Task<IActionResult> GetWalletModalByUser([FromBody] WalletDTO wallet)
+    public async Task<IActionResult> UpdateWalletByUser([FromBody] WalletDTO wallet)
     {
         try
         {
@@ -97,7 +96,7 @@ public class WalletController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e);
         }
     }
 
@@ -113,7 +112,22 @@ public class WalletController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e);
+        }
+    }
+
+    [HttpDelete]
+    public async Task<IActionResult> DeleteWallet([FromQuery] string walletId)
+    {
+        try
+        {
+            await _walletService.DeleteWalletAsync(walletId);
+
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e);
         }
     }
 
@@ -121,9 +135,16 @@ public class WalletController : ControllerBase
     [Route("GetPeriodResult")]
     public async Task<IActionResult> GetPeriodResult([FromQuery] string userId, [FromQuery] int year, [FromQuery] int month)
     {
-        var periodResult = await _walletService.GetPeriodResultByUserAsync(userId, year, month);
+        try
+        {
+            var periodResult = await _walletService.GetPeriodResultByUserAsync(userId, year, month);
 
-        return Ok(periodResult);
+            return Ok(periodResult);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e);
+        }
     }
 
     [HttpPost]
@@ -138,7 +159,7 @@ public class WalletController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e);
         }
     }
 }
