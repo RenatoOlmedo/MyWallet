@@ -8,6 +8,9 @@ export const UserWallet = () =>{
     const [carregado, setCarregado] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
     const [userName, setUserName] = useState("")
+    const [year, setYear] = useState("")
+    const [month, setMonth] = useState("")
+    const [tipoModal, setTipoModal] = useState("")
 
     const {id} = useParams();
 
@@ -20,9 +23,11 @@ export const UserWallet = () =>{
        })
     },[id])
 
-    function abreModal(){
+    function abreModal(year, month, tipo){
+        setTipoModal(tipo)
+        setYear(year)
+        setMonth(month)
         setModalOpen(true)
-        console.log('aberto', modalOpen)
     }
     function fecharModal() {
         setModalOpen(false);
@@ -35,13 +40,24 @@ export const UserWallet = () =>{
     }
     return (
         <>
+        <section id="userList">
         { carregado ?
             <>
-            <ModalWallet user="" open={modalOpen} onClose={fecharModal}></ModalWallet> 
+            {modalOpen ? 
+            <ModalWallet type={tipoModal} userProps={userName} userId={id} yearProps={year} monthProps={month} open={modalOpen} onClose={fecharModal}></ModalWallet> 
+            :
+            ""
+            }
             <div class="container pt-5">
                 <div class="row justify-content-center">
                     <div class="col-12">
-                        <h1 class="text-center" onClick={abreModal}>Carteira de {userName}</h1>
+                        <h1 class="text-center" >Carteira de {userName}</h1>
+                    </div>
+                    <div className="col-12 text-end mt-3">
+                            <button className="btn btn-primary" onClick={() =>{
+                                setTipoModal(`adicionar`);
+                                setModalOpen(true)
+                            }}>Adicionar</button>
                     </div>
                     <div class="col-12">
                        <div class="table-responsive">
@@ -54,17 +70,18 @@ export const UserWallet = () =>{
                                     <th class="" width="25%" colspan="4">#</th>
 
                                 </tr>
+                                </thead>
                                 {wallet.map((item, index) =>(
                                     <tr>
                                         <td colSpan={4}>{item.result}</td>
                                         <td colSpan={4}>{item.month}</td>
                                         <td colSpan={4}>{item.year}</td>
                                         <td colSpan={4}>
-                                            <button className="btn btn-primary">Editar</button>
+                                            <button onClick={()=>abreModal(item.year, item.month,'update')} className="btn btn-secondary">Editar</button>
                                         </td>
                                     </tr>
                                 ))}
-                            </thead>
+                            
                         </table>
                        </div>
                     </div>
@@ -78,6 +95,7 @@ export const UserWallet = () =>{
             <span class="visually-hidden">Loading...</span>
           </div>
         }     
+        </section>
         </>
     )
 }

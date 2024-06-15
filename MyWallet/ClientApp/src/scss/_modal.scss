@@ -1,5 +1,5 @@
 .modal{
-    height: 100vh;
+    height: auto;
     width: 100vw;
     z-index: 10;
     opacity: 1;
@@ -7,7 +7,12 @@
     align-self:center;
     justify-content: center;
     position: fixed;
-    padding: 3rem;
+    min-height: 100vh;
+    padding: 6rem 3rem;
+
+    @media screen and (max-width:992px){
+        padding: 6rem .5rem;
+    }
     &.fechada{
         height: 0;
         z-index: -10;
@@ -16,6 +21,7 @@
         position: absolute;
         left: 0;
         top: 0;
+        min-height: 100vh;
         height: 100%;
         width: 100%;
         z-index: 1;
@@ -24,5 +30,8 @@
     .conteudo-modal{
         z-index: 10;
         background-color: white;
+        height: auto;
+        max-height: 70vh;
+        overflow-y: scroll;
     }
 }
