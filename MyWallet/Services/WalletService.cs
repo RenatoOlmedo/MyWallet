@@ -4,6 +4,7 @@ using MyWallet.Interfaces;
 using MyWallet.Models;
 using MyWallet.Models.DTO;
 using MyWallet.Models.Enums;
+using static System.Decimal;
 
 namespace MyWallet.Services;
 
@@ -301,24 +302,36 @@ public class WalletService : IWalletService
         }
     }
 
-    public List<WalletListViewDTO> GetWalletListByUser(string userId)
+    public async Task<WalletListViewDTO> GetWalletListByUserAsync(string userId)
     {
+        var user = await _db.Users
+            .FindAsync(userId);
+
+        if (user is null)
+            throw new KeyNotFoundException("Usuário não encontrado!");
+        
         var wallets = _db.Wallets
             .Where(x => 
-                x.User.Id == userId)
+                x.User == user)
             .OrderByDescending(y => y.Year)
             .ThenBy(m => m.Month);
 
-        var walletsDto = new List<WalletListViewDTO>();
+        var walletsDto = new WalletListViewDTO();
 
-        walletsDto.AddRange(wallets.Select(x => new WalletListViewDTO
+        walletsDto.UserName = user.UserName;
+
+        var walletList = new List<WalletListDTO>();
+        
+        walletList.AddRange(wallets.Select(x => new WalletListDTO
             {
                 year = x.Year,
                 month = x.Month,
-                result = Decimal.MinValue,
+                result = MinValue,
                 walletId = x.Id
             })
         );
+
+        walletsDto.WalletList = walletList;
         
         return walletsDto;
     }
@@ -370,7 +383,7 @@ public class WalletService : IWalletService
         await _db.SaveChangesAsync();
     }
 
-    public async Task<List<PeriodResultDTO>> GetPeriodResultByUser(string userId, int year, int month)
+    public async Task<List<PeriodResultDTO>> GetPeriodResultByUserAsync(string userId, int year, int month)
     {
         var results = await _db.PeriodResult.Where(u =>
             u.User.Id == userId
@@ -393,7 +406,7 @@ public class WalletService : IWalletService
         return periodDto;
     }
 
-    public async Task CreatePeriodResult(string userId, PeriodResultDTO periodResultDto)
+    public async Task CreatePeriodResultAsync(string userId, PeriodResultDTO periodResultDto)
     {
         var user = await _db.Users.FindAsync(userId);
         

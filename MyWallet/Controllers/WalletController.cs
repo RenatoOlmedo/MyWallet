@@ -84,12 +84,21 @@ public class WalletController : ControllerBase
 
     [HttpGet]
     [Route("listWallet")]
-    public IActionResult GetWalletsByUser([FromQuery] string? userId)
+    public async Task<IActionResult> GetWalletsByUser([FromQuery] string? userId)
     {
-        if (userId is null)
-            return NoContent();
-        
-        return Ok(_walletService.GetWalletListByUser(userId));
+        try
+        {
+            if (userId is null)
+                return NoContent();
+
+            var walletsList = await _walletService.GetWalletListByUserAsync(userId);
+
+            return Ok(walletsList);
+        }
+        catch (Exception e)
+        {
+            return BadRequest();
+        }
     }
 
     [HttpPost]
@@ -112,7 +121,7 @@ public class WalletController : ControllerBase
     [Route("GetPeriodResult")]
     public async Task<IActionResult> GetPeriodResult([FromQuery] string userId, [FromQuery] int year, [FromQuery] int month)
     {
-        var periodResult = await _walletService.GetPeriodResultByUser(userId, year, month);
+        var periodResult = await _walletService.GetPeriodResultByUserAsync(userId, year, month);
 
         return Ok(periodResult);
     }
@@ -123,7 +132,7 @@ public class WalletController : ControllerBase
     {
         try
         {
-            await _walletService.CreatePeriodResult(userId, periodResult);
+            await _walletService.CreatePeriodResultAsync(userId, periodResult);
             
             return Ok();
         }
