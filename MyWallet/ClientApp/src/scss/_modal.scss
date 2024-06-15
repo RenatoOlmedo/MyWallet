@@ -28,10 +28,37 @@
         background-color: #00000070;
     }
     .conteudo-modal{
+        border-radius: 10px;
         z-index: 10;
-        background-color: white;
+        background-color: #f2f2f2;
         height: auto;
         max-height: 70vh;
-        overflow-y: scroll;
+        overflow-y: auto;
+    }
+}
+
+.delete{
+    width: 25px;
+    height: 25px;
+    // width: max-content;
+    background-image: url(../images/delete.svg);
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+}
+
+.close{
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    left: 100%;
+    top: -30px;
+    background-image: url('../images/close.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    cursor: pointer;
+    @media screen and (max-width: 992px){
+        left: 96%;
+        top: -9px;
     }
 }
