@@ -16,6 +16,7 @@ export const ModalWallet = ({userProps,userId,yearProps, monthProps, open,onClos
             result:"",
             financialOperation:"",
             status:0,
+            expectedOutCome:""
         }],
         expectedOutcomes:[{
             expectedOutcomeId:"",
@@ -82,16 +83,17 @@ export const ModalWallet = ({userProps,userId,yearProps, monthProps, open,onClos
 
     const retornoTipo = type == `update` ?  
     <div class="col-10 text-center pt-5">
+        {/* Modal de update */}
           <form onSubmit={(e) => HandleSubmit(e,'PUT',"")}>
         {/* <input onChange={(e)=> setWallet({...wallet, walletId:e.target.value})} className="form-control" value={wallet.walletId} type="text" readOnly/> */}
 
-        <div className="text-start mb-3">
+        {/* <div className="text-start mb-3">
             <label className="form-label" htmlFor="resultOutcome">Resultado esperado</label>
             <div className="input-group">
             <span class="input-group-text">R$</span>
             <input value={wallet.expectedOutcomes[0].expectedResult} onChange={(e)=> setWallet({...wallet,expectedOutcomes:[{...wallet.expectedOutcomes[0], expectedResult:e.target.value},...wallet.expectedOutcomes.slice(1)] })} id="resultOutcome" className="form-control" />
             </div>
-        </div>
+        </div> */}
         
         <div className="text-start mb-3">
             <label className="form-label" htmlFor="totalInvestido">Total da operação</label>
@@ -117,11 +119,11 @@ export const ModalWallet = ({userProps,userId,yearProps, monthProps, open,onClos
             </div>
         </div>
 
-        <div className="text-start mb-3">
+        {/* <div className="text-start mb-3">
             <label className="form-label" htmlFor="lucro">Resultado</label>
             <div className="input-group">
                 <span class="input-group-text">R$</span>
-                <input className="form-control" id="lucro" value={wallet.profit} onChange={(e) => setWallet({...wallet, profit:e.target.value})}/>
+                <input readOnly className="form-control" id="lucro" value={wallet.profit} onChange={(e) => setWallet({...wallet, profit:e.target.value})}/>
             </div>
         </div>
 
@@ -129,9 +131,9 @@ export const ModalWallet = ({userProps,userId,yearProps, monthProps, open,onClos
             <label className="form-label" htmlFor="total">Patrimônio</label>
            <div className="input-group">
            <span class="input-group-text">R$</span>
-            <input className="form-control" id="total" value={wallet.currentHeritage} onChange={(e) => setWallet({...wallet, currentHeritage:e.target.value})}/>
+            <input readOnly className="form-control" id="total" value={wallet.currentHeritage} onChange={(e) => setWallet({...wallet, currentHeritage:e.target.value})}/>
            </div>
-        </div>
+        </div> */}
         {
     Array.from({ length: qtdeOperations }, (_, index) => (
         <div key={index}>
@@ -157,7 +159,8 @@ export const ModalWallet = ({userProps,userId,yearProps, monthProps, open,onClos
                     </div>
                 </div>
 
-                <div className="text-start mb-3">
+                    <div className="row">
+                    <div className="text-start mb-3 col-6">
                     <label className="form-label" htmlFor={`resultOperation_${index}`}>Resultado da operação</label>
                     <div className="input-group">
                     <span class="input-group-text">R$</span>
@@ -176,7 +179,7 @@ export const ModalWallet = ({userProps,userId,yearProps, monthProps, open,onClos
                     </div>
                 </div>
 
-                <div className="text-start mb-3">
+                <div className="text-start mb-3 col-6">
                     <label className="form-label" htmlFor={`statusOperation_${index}`}>Status da operação</label>
                     <select
                     required
@@ -194,6 +197,7 @@ export const ModalWallet = ({userProps,userId,yearProps, monthProps, open,onClos
                         <option value={2}>Em andamento</option>
                     </select>
                 </div>
+                    </div>
                 <div className="text-end d-flex justify-content-end">
                     <div onClick={()=>{
                         var update = [...wallet.operations];
@@ -240,19 +244,21 @@ export const ModalWallet = ({userProps,userId,yearProps, monthProps, open,onClos
     </form>
     </div>
     :
+
+    // Modal de cadastro
     <div class="col-10 text-center pt-5">
     <form onSubmit={(e) => HandleSubmit(e,'POST',"CreateWallet")}>
         {/* <input onChange={(e)=> setWallet({...wallet, walletId:e.target.value})} className="form-control" value={wallet.walletId} type="text" readOnly/> */}
 
         <input type="hidden" value={wallet.userId}></input>
 
-        <div className="text-start mb-3">
+        {/* <div className="text-start mb-3">
             <label className="form-label" htmlFor="resultOutcome">Resultado esperado</label>
             <div className="input-group">
                 <span class="input-group-text">R$</span>
                 <input value={wallet.expectedOutcomes[0].expectedResult} onChange={(e)=> setWallet({...wallet,expectedOutcomes:[{...wallet.expectedOutcomes[0], expectedResult:e.target.value},...wallet.expectedOutcomes.slice(1)] })} id="resultOutcome" className="form-control" />
             </div>
-        </div>
+        </div> */}
 
         <div className="text-start mb-3">
             <label className="form-label" htmlFor="year">Ano da operação</label>
@@ -264,10 +270,10 @@ export const ModalWallet = ({userProps,userId,yearProps, monthProps, open,onClos
             <input className="form-control" id="year" value={wallet.month} onChange={(e) => setWallet({...wallet, month:parseInt(e.target.value)})}/>
         </div>
         
-        <div className="text-start mb-3">
+        {/* <div className="text-start mb-3">
             <label className="form-label" htmlFor="totalInvestido">Nome da operação</label>
             <input className="form-control" id="totalInvestido" value={wallet.amountInvested} onChange={(e) => setWallet({...wallet, amountInvested:e.target.value})}/>
-        </div>
+        </div> */}
 
         <div className="text-start mb-3">
             <label className="form-label" htmlFor="aporteInvestido">Aporte</label>
@@ -285,7 +291,7 @@ export const ModalWallet = ({userProps,userId,yearProps, monthProps, open,onClos
             </div>
         </div>
 
-        <div className="text-start mb-3">
+        {/* <div className="text-start mb-3">
             <label className="form-label" htmlFor="lucro">Resultado</label>
             <div className="input-group">
                 <span class="input-group-text">R$</span>
@@ -299,7 +305,7 @@ export const ModalWallet = ({userProps,userId,yearProps, monthProps, open,onClos
             <span class="input-group-text">R$</span>
              <input className="form-control" id="total" value={wallet.currentHeritage} onChange={(e) => setWallet({...wallet, currentHeritage:e.target.value})}/>
             </div>
-        </div>
+        </div> */}
 
         {
               Array.from({ length: qtdeOperations }, (_, index) => (
@@ -326,7 +332,8 @@ export const ModalWallet = ({userProps,userId,yearProps, monthProps, open,onClos
                             </div>
                         </div>
         
-                        <div className="text-start mb-3">
+                        <div className="row">
+                        <div className="text-start mb-3 col-6">
                             <label className="form-label" htmlFor={`resultOperation_${index}`}>Resultado da operação</label>
                             <div className="input-group">
                             <span class="input-group-text">R$</span>
@@ -345,7 +352,7 @@ export const ModalWallet = ({userProps,userId,yearProps, monthProps, open,onClos
                             </div>
                         </div>
         
-                        <div className="text-start mb-3">
+                        <div className="text-start mb-3 col-6">
                             <label className="form-label" htmlFor={`statusOperation_${index}`}>Status da operação</label>
                             <select
                             required
@@ -363,6 +370,7 @@ export const ModalWallet = ({userProps,userId,yearProps, monthProps, open,onClos
                                 <option value={2}>Em andamento</option>
                             </select>
                         </div>
+                        </div>
                         <div className="text-end d-flex justify-content-end">
                             <div onClick={()=>{
                                 var update = [...wallet.operations];
@@ -379,7 +387,7 @@ export const ModalWallet = ({userProps,userId,yearProps, monthProps, open,onClos
                 </div>
             ))
         }
-  <div className="text-start">
+        <div className="text-start">
     <button onClick={(e) => {
         e.preventDefault();
         setQtdeOperations(qtdeOperations + 1);
