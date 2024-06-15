@@ -11,6 +11,7 @@ const context =  [
   "/Wallet/listWallet",
   "/Wallet/CreateWallet",
   "/user",
+  "/Wallet/GetModal",
   "/swagger/index.html",
   "/swagger",
   "/_configuration",
