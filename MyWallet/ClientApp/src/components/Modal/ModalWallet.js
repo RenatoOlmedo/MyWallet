@@ -35,7 +35,11 @@ export const ModalWallet = ({userProps,userId,yearProps, monthProps, open,onClos
 
     useEffect(()=>{
         setCarregado(true)
+        setYear("")
+        setMonth("")
         async function getWallet(){
+            setMonth(monthProps)
+            setYear(yearProps)
             setCarregado(false)
             var response = await fetch(`Wallet/GetModal?id=${userId}&year=${yearProps}&month=${monthProps}`)
             var data = response.json();
@@ -55,7 +59,7 @@ export const ModalWallet = ({userProps,userId,yearProps, monthProps, open,onClos
                 setOpened(false)
             }
         }
-    },[])
+    },[type])
     function fecharModal(){
         setOpened(false)
         onClose()
@@ -427,7 +431,7 @@ export const ModalWallet = ({userProps,userId,yearProps, monthProps, open,onClos
                                 <div onClick={fecharModal} className="close"></div>
                             </div>
                         <div class="col-12 col-md-10">
-                            <h1 className="text-center text-black">Carteira de {userProps} - {monthProps}/{yearProps}</h1>
+                            <h1 className={`text-center text-black`}>Carteira de {userProps} <span className={type == "update" ? '' : 'd-none'}>- {monthProps}/{yearProps}</span></h1>
                         </div>
                     
                         {retornoTipo}
