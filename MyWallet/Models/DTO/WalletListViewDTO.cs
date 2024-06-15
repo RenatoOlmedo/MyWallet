@@ -2,6 +2,12 @@
 
 public class WalletListViewDTO
 {
+    public string UserName { get; set; }
+    public List<WalletListDTO> WalletList{ get; set; }
+}
+
+public class WalletListDTO
+{
     public int year { get; set; }
     public int month { get; set; }
     public decimal result { get; set; }
