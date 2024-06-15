@@ -238,7 +238,7 @@ public class WalletService : IWalletService
         }
     }
 
-    private static void RemoveExtraOutcomes(WalletDTO wallet, Wallet walletDetails)
+    private void RemoveExtraOutcomes(WalletDTO wallet, Wallet walletDetails)
     {
         var outcomesToRemove = walletDetails.ExpectedOutcomes
             .Where(o =>
@@ -250,9 +250,11 @@ public class WalletService : IWalletService
         outcomesToRemove.ForEach(x =>
             walletDetails.ExpectedOutcomes
                 .Remove(x));
+        
+        _db.ExpectedOutcomes.RemoveRange(outcomesToRemove);
     }
 
-    private static void RemoveExtraOperations(WalletDTO wallet, Wallet walletDetails)
+    private void RemoveExtraOperations(WalletDTO wallet, Wallet walletDetails)
     {
         var operationsToRemove = walletDetails.Operations
             .Where(o =>
@@ -264,6 +266,8 @@ public class WalletService : IWalletService
         operationsToRemove.ForEach(x =>
             walletDetails.Operations
                 .Remove(x));
+        
+        _db.Operations.RemoveRange(operationsToRemove);
     }
 
     private static void UpdateWalletBasicProps(WalletDTO wallet, Wallet walletDetails)
@@ -313,23 +317,34 @@ public class WalletService : IWalletService
         var wallets = _db.Wallets
             .Where(x => 
                 x.User == user)
+            .Include(o => 
+                o.Operations
+                    .Where(s => 
+                        s.Status == OperationStatusEnum.Completed))
             .OrderByDescending(y => y.Year)
             .ThenBy(m => m.Month);
 
         var walletsDto = new WalletListViewDTO();
 
         walletsDto.UserName = user.UserName;
-
-        var walletList = new List<WalletListDTO>();
         
-        walletList.AddRange(wallets.Select(x => new WalletListDTO
+        var walletList = new List<WalletListDTO>();
+
+        foreach (var wallet in wallets)
+        {
+            var result = 0M;
+
+            if (wallet.Operations is not null)
+                result = wallet.Operations.Sum(o => o.Result);
+            
+            walletList.Add(new WalletListDTO
             {
-                year = x.Year,
-                month = x.Month,
-                result = MinValue,
-                walletId = x.Id
-            })
-        );
+                year = wallet.Year,
+                month = wallet.Month,
+                result = result,
+                walletId = wallet.Id
+            });
+        }
 
         walletsDto.WalletList = walletList;
         
@@ -342,6 +357,16 @@ public class WalletService : IWalletService
 
         if (user is null)
             throw new KeyNotFoundException("Usuário não encontrado");
+
+        var hasCreatedWallet = await _db.Wallets
+            .Where(x => 
+                x.User == user 
+                && x.Year == wallet.Year 
+                && x.Month == wallet.Month)
+            .AnyAsync();
+
+        if (hasCreatedWallet)
+            throw new Exception("Usuário já possui Carteira para essa data.");
 
         var operations = new List<Operation>();
         var expectedOutcome = new List<ExpectedOutcome>();
@@ -379,6 +404,24 @@ public class WalletService : IWalletService
         await _db.Wallets.AddAsync(newWallet);
         await _db.Operations.AddRangeAsync(operations);
         await _db.ExpectedOutcomes.AddRangeAsync(expectedOutcome);
+
+        await _db.SaveChangesAsync();
+    }
+
+    public async Task DeleteWalletAsync(string walletId)
+    {
+        var wallet = await _db.Wallets
+            .Include(o => o.Operations)
+            .Include(e => e.ExpectedOutcomes)
+            .FirstAsync(x => x.Id == walletId);
+
+        _db.Wallets.Remove(wallet);
+        
+        if (wallet.Operations != null) 
+            _db.Operations.RemoveRange(wallet.Operations);
+        
+        if (wallet.ExpectedOutcomes != null) 
+            _db.ExpectedOutcomes.RemoveRange(wallet.ExpectedOutcomes);
 
         await _db.SaveChangesAsync();
     }
