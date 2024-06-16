@@ -84,6 +84,8 @@ export const Home = () => {
     const valorReducer = useSelector(state => state.valor)
     const [response, setResponse] = useState("")
     const [modalOpen, setModalOpen] = useState(false)
+    const [news, setNews] = useState()
+    const [results, setResults] = useState()
     const navigate = useNavigate()
 
     async function getWalletData(userId) {
@@ -105,6 +107,7 @@ export const Home = () => {
                   
                     const walletData = await getWalletData(user.sub);
                     setResponse(walletData);
+                    console.log('wallet',walletData)
                    
                 }
                
@@ -125,8 +128,25 @@ export const Home = () => {
             }
         }
 
+        async function fetchNews(){
+            const news = await fetch('/News', {
+                method:'GET'
+            })
+            const data = await news.json();
+            console.log(data)
+            setNews(data)
+        }
+        async function getByperiod(){
+            const result = await fetch(`Wallet/GetPeriodResult?userId=${userId}&year=2024&month=${valorReducer.valor}`)
+            const data = await result.json();
+            console.log('Result: ', data)
+            setResults(data)
+        }
+
         initialize();
         fetchUserData();
+        fetchNews();
+        getByperiod()
     }, [valorReducer.valor]);
 
     const estiloPersonalizado = {
@@ -181,21 +201,21 @@ export const Home = () => {
                             </div>
                         </div>
                         <div className="col-lg-3 col-sm-6 d-flex flex-column">
-                            <CardList title={"Operações Realizadas"} ops={props.CompletedOperations} />
+                            <CardList title={"Operações Realizadas"} ops={response.completedOperations} />
                         </div>
                         <div className="col-lg-3 col-sm-6 d-flex flex-column">
-                            <CardList title={"Operações em Andamento"} ops={props.OnGoingOperations} />
+                            <CardList title={"Operações em Andamento"} ops={response.onGoingOperations} />
                         </div>
                         <div className="col-lg-3 col-sm-6 d-flex flex-column">
-                            <CardList title={"Lucro Provisório"} ops={props.ExpectedOutcome} />
+                            <CardList title={"Lucro Provisório"} ops={response.expectedOutcome} />
                         </div>
                     </div>
                     <div className="row flex" style={rowStyle}>
                         <div className="col-lg-6 col-sm-12">
-                            <BarChart props={props.PeriodResults} />
+                            <BarChart props={results} />
                         </div>
                         <div className="col-lg-6 col-sm-12">
-                            <News props={props.News} />
+                            <News props={news} />
                         </div>
                     </div>
                 </div>

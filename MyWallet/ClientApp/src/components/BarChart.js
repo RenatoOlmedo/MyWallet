@@ -5,9 +5,12 @@ const BarChart = ({ props }) => {
     const chartRef = useRef(null);
 
     useEffect(() => {
-        const labels = props.map(item => item.Month);
-        const result = props.map(item => item.Result);
-
+  
+        console.log(props)
+        
+        const labels = props.map(item =>item.month);
+        const result = props.map(item => item.result);
+        
         const ctx = chartRef.current.getContext('2d');
 
         new Chart(ctx, {

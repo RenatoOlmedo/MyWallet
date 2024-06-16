@@ -12,8 +12,8 @@ export class News extends Component {
                     <ul className="list-group">
                         {props.map((prop, index) => (
                             <li key={index} className="list-group-item">
-                                <h5 className="card-title">{prop.Title}</h5>
-                                <p className="card-text">{prop.Body}</p>
+                                <h5 className="card-title">{prop.title}</h5>
+                                <p className="card-text">{prop.body}</p>
                             </li>
                         ))}
                     </ul>

@@ -15,8 +15,8 @@ export class CardList extends Component {
                     <ul className="list-group">
                         {ops.map((op, index) => (
                             <li key={index} className="list-group-item d-flex justify-content-between">
-                                <span>{op.FinancialOperation}</span>
-                                <span>{op.Result}</span>
+                                <span>{op.financialOperation}</span>
+                                <span>{op.result}</span>
                             </li>
                         ))}
                     </ul>
