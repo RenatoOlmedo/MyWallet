@@ -16,12 +16,7 @@ export const ModalWallet = ({userProps,userId,yearProps, monthProps, open,onClos
             result:"",
             financialOperation:"",
             status:0,
-            expectedOutCome:""
-        }],
-        expectedOutcomes:[{
-            expectedOutcomeId:"",
-            expectedResult:"",
-            financialOperation:""
+            expectedOutcome:""
         }],
         year:"",
         month:"",
@@ -121,11 +116,13 @@ export const ModalWallet = ({userProps,userId,yearProps, monthProps, open,onClos
                         <div className="input-group">
                        
                         <input
+                        type="number"
+                        step="any"
                         required
                            onChange={(e) => setWallet({
                             ...wallet,
                             deposits: wallet.deposits.map((deposit, idx) => 
-                                idx === index ? { ...deposit, value: parseInt(e.target.value) } : deposit
+                                idx === index ? { ...deposit, value: parseFloat(e.target.value) } : deposit
                             )
                         })}
                             id={`valueDeposit_${index}`}
@@ -181,11 +178,13 @@ const arraySaques = (<>
                         <div className="input-group">
                        
                         <input
+                         type="number"
+                        step="any"
                         required
                            onChange={(e) => setWallet({
                             ...wallet,
                             withdraws: wallet.withdraws.map((withdraw, idx) => 
-                                idx === index ? { ...withdraw, value: parseInt(e.target.value) } : withdraw
+                                idx === index ? { ...withdraw, value: parseFloat(e.target.value) } : withdraw
                             )
                         })}
                             id={`valueWithdraw_${index}`}
@@ -254,6 +253,26 @@ const arrayOperations = (<>
                     </div>
                 </div>
 
+                <div className="text-start mb-3">
+                    <label className="form-label" htmlFor={`expectedOperation_${index }`}>Expectativa da operação</label>
+                    <div className="input-group">
+                    <input
+                     type="number"
+                        step="any"
+                    required
+                       onChange={(e) => setWallet({
+                        ...wallet,
+                        operations: wallet.operations.map((operation, idx) => 
+                            idx === index ? { ...operation, expectedOutcome: parseFloat(e.target.value) } : operation
+                        )
+                    })}
+                        id={`expectedOperation_${index}`}
+                        className="form-control"
+                        value={wallet.operations[index].expectedOutcome}
+                    />
+                    </div>
+                </div>
+
                     <div className="row">
                     <div className="text-start mb-3 col-6">
                     <label className="form-label" htmlFor={`resultOperation_${index}`}>Resultado da operação</label>
@@ -261,11 +280,13 @@ const arrayOperations = (<>
                     <span class="input-group-text">R$</span>
                     <input
                     required
+                     type="number"
+                        step="any"
                         value={wallet.operations[index].result}
                         onChange={(e) => setWallet({
                             ...wallet,
                             operations: wallet.operations.map((operation, idx) => 
-                                idx === index ? { ...operation, result: e.target.value } : operation
+                                idx === index ? { ...operation, result: parseFloat(e.target.value) } : operation
                             )
                         })}
                         id={`resultOperation_${index}`}
@@ -369,7 +390,8 @@ const arrayOperations = (<>
             <label className="form-label" htmlFor="saque">Saque</label>
             <div className="input-group">
             <span class="input-group-text">R$</span>
-            <input className="form-control" id="saque" value={wallet.withdraw} onChange={(e) => setWallet({...wallet, withdraw:e.target.value})}/>
+            <input  type="number"
+                        step="any" className="form-control" id="saque" value={wallet.withdraw} onChange={(e) => setWallet({...wallet, withdraw:parseFloat(e.target.value)})}/>
             </div>
         </div>
 
@@ -401,12 +423,12 @@ const arrayOperations = (<>
 
         <div className="text-start mb-3">
             <label className="form-label" htmlFor="year">Ano da operação</label>
-            <input className="form-control" id="year" value={wallet.year} onChange={(e) => setWallet({...wallet, year:parseInt(e.target.value)})}/>
+            <input type="number" className="form-control" id="year" value={wallet.year} onChange={(e) => setWallet({...wallet, year:parseInt(e.target.value)})}/>
         </div>
 
         <div className="text-start mb-3">
-            <label className="form-label" htmlFor="year">Mês da operação</label>
-            <input className="form-control" id="year" value={wallet.month} onChange={(e) => setWallet({...wallet, month:parseInt(e.target.value)})}/>
+            <label className="form-label" htmlFor="month">Mês da operação</label>
+            <input type="number" className="form-control" id="month" value={wallet.month} onChange={(e) => setWallet({...wallet, month:parseInt(e.target.value)})}/>
         </div>
         
         {/* <div className="text-start mb-3">
