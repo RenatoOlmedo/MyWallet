@@ -133,13 +133,13 @@ public class WalletController : ControllerBase
 
     [HttpGet]
     [Route("GetPeriodResult")]
-    public async Task<IActionResult> GetPeriodResult([FromQuery] string userId, [FromQuery] int year, [FromQuery] int month)
+    public async Task<IActionResult> GetPeriodResult([FromQuery] string userId)
     {
         try
         {
-            var periodResult = await _walletService.GetPeriodResultByUserAsync(userId, year, month);
+            var periodResults = await _walletService.GetPeriodResultByUserAsync(userId);
 
-            return Ok(periodResult);
+            return Ok(new {periodResults});
         }
         catch (Exception e)
         {

@@ -10,5 +10,5 @@ public interface IWalletService
     Task<WalletListViewDTO> GetWalletListByUserAsync(string userId);
     Task CreateNewWalletAsync(WalletDTO wallet);
     Task DeleteWalletAsync(string walletId);
-    Task<List<PeriodResultDTO>> GetPeriodResultByUserAsync(string userId, int year, int month);
+    Task<List<PeriodResultDTO>> GetPeriodResultByUserAsync(string userId);
 }

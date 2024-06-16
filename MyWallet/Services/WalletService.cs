@@ -528,7 +528,7 @@ public class WalletService : IWalletService
         await _db.SaveChangesAsync();
     }
 
-    public async Task<List<PeriodResultDTO>> GetPeriodResultByUserAsync(string userId, int year, int month)
+    public async Task<List<PeriodResultDTO>> GetPeriodResultByUserAsync(string userId)
     {
         var user = await _db.Users.FindAsync(userId);
 
