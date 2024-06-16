@@ -7,6 +7,7 @@ import authService from "./api-authorization/AuthorizeService";
 import Calendar from './Calendar/Calendar';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { ModalNews } from './Modal/ModalNews';
 
 const rowStyle = {
     marginTop: '20px',
@@ -82,11 +83,11 @@ export const Home = () => {
     const [logado, setLogado] = useState(false);
     const valorReducer = useSelector(state => state.valor)
     const [response, setResponse] = useState("")
+    const [modalOpen, setModalOpen] = useState(false)
     const navigate = useNavigate()
 
     async function getWalletData(userId) {
         const response = await fetch(`/Wallet?id=${userId}&year=2024&month=${valorReducer.valor}`);
-        console.log('response', response)
         return await response.json();
     }
 
@@ -101,16 +102,11 @@ export const Home = () => {
                     setUserId(user.sub);
                     const userRoles = await authService.getUserRoles();
                     setIsAdmin(userRoles.includes('Admin'));
-                    // setIsUser(userRoles.includes('User'));
+                  
                     const walletData = await getWalletData(user.sub);
                     setResponse(walletData);
-                    // if (userId) {
-                    //     setWalletData(walletData.user);
-                    // }
+                   
                 }
-                // else{
-                //     navigate("/Identity/Account/Login")
-                // }
                
             } catch (error) {
                 console.error('Initialization error:', error);
@@ -139,6 +135,10 @@ export const Home = () => {
 
     if (isLoading) {
         return <div>Loading...</div>;
+    }
+
+    function fecharModal() {
+        setModalOpen(false);
     }
 
     return (
@@ -200,11 +200,26 @@ export const Home = () => {
                     </div>
                 </div>
             ) : (
-                <ul className="list-group">
-                    {userData.map((op, index) => (
-                        <li key={index} className="list-group-item"><a href={`/wallets/${op.userId}`}>{op.userName}</a></li>
-                    ))}
-                </ul>
+                <>
+                <ModalNews open={modalOpen} onClose={fecharModal}/>
+                <div className='container'>
+                    <div className='row justify-content-center'>
+                        <div className='col-12 text-end'>
+                            <button onClick={()=>{
+                                setModalOpen(true)
+                            }} className='btn btn-primary'>Adicionar notícia</button>
+                        </div>
+
+                        <div className='col-12 mt-5'>
+                        <ul className="list-group">
+                            {userData.map((op, index) => (
+                                <li key={index} className="list-group-item"><a href={`/wallets/${op.userId}`}>{op.userName}</a></li>
+                            ))}
+                        </ul>
+                        </div>
+                    </div>
+                </div>
+                </>
             )}
          </>
         :
