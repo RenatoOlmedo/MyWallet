@@ -3,37 +3,42 @@ import Chart from 'chart.js/auto';
 
 const BarChart = ({ props }) => {
     const chartRef = useRef(null);
+    const myChartRef = useRef(null);
 
     useEffect(() => {
-  
-        console.log(props)
-        
-        const labels = props.map(item =>item.month);
-        const result = props.map(item => item.result);
-        
-        const ctx = chartRef.current.getContext('2d');
+        if (chartRef.current) {
+            const labels = props.map(item => item.month);
+            const result = props.map(item => item.result);
+            const ctx = chartRef.current.getContext('2d');
 
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Lucro',
-                    data: result,
-                    backgroundColor: 'rgba(75,192,192,0.4)',
-                    borderColor: 'rgba(75,192,192,1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true
+            // Destruir o gráfico anterior, se existir
+            if (myChartRef.current) {
+                myChartRef.current.destroy();
+            }
+
+            // Criar novo gráfico
+            myChartRef.current = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Lucro',
+                        data: result,
+                        backgroundColor: 'rgba(75,192,192,0.4)',
+                        borderColor: 'rgba(75,192,192,1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
     }, [props]);
 
     return (

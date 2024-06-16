@@ -15,42 +15,27 @@ const rowStyle = {
 };
 
 const props = {
-    User: "Renato Olmedo",
-    Deposit: 3000,
-    AmountInvested: 50000,
-    CurrentHeritage: 55450,
-    Withdraw: 1000,
-    Profit: 3540,
+    deposit: 0,
+    amountInvested: 0,
+    currentHeritage: 0,
+    withdraw: 0,
+    profit: 0,
     Month: "Abril",
-    Result: 3450,
-    CompletedOperations: [
-        { FinancialOperation: "Venda Coberta ITUB4", Result: 2000 },
-        { FinancialOperation: "Lançamento MGLU3", Result: 2000 },
-        { FinancialOperation: "Venda papeis Vale3", Result: 2000 }
+    result: 0,
+    completedOperations: [
+        { financialOperation: "", result: 0 },
+        { financialOperation: "", result: 0 },
+        { financialOperation: "", result: 0 }
     ],
-    OnGoingOperations: [
-        { FinancialOperation: "Venda Coberta ITUB4", Result: 2000 },
-        { FinancialOperation: "Lançamento MGLU3", Result: 2000 },
-        { FinancialOperation: "Venda papeis Vale3", Result: 2000 }
+    onGoingOperations: [
+        { financialOperation: "", result: 0 },
+        { financialOperation: "", result: 0 },
+        { financialOperation: "", result: 0 }
     ],
-    ExpectedOutcome: [
-        { FinancialOperation: "Venda Coberta ITUB4", Result: 2000 },
-        { FinancialOperation: "Lançamento MGLU3", Result: 2000 },
-        { FinancialOperation: "Venda papeis Vale3", Result: 2000 }
-    ],
-    News: [
-        { Title: "Queda do dolar", Body: "Durante o mes de março houve uma queda no valor do dolar" },
-        { Title: "Aumento nas Vendas", Body: "No último trimestre, houve um aumento significativo nas vendas de produtos." },
-        { Title: "Expansão Internacional", Body: "A empresa anunciou planos para expandir suas operações para mercados internacionais no próximo ano." },
-        { Title: "Inovação em Tecnologia", Body: "Foi lançada uma nova linha de produtos com tecnologia de ponta, recebendo ótimas críticas dos clientes." }
-    ],
-    PeriodResults: [
-        { Month: "Janeiro", Result: 4200 },
-        { Month: "Fevereiro", Result: 2850 },
-        { Month: "Março", Result: 3100 },
-        { Month: "Abril", Result: 2150 },
-        { Month: "Maio", Result: 4780 },
-        { Month: "Junho", Result: 2000 }
+    expectedOutcome: [
+        { financialOperation: "", Result: 0 },
+        { financialOperation: "", Result: 0 },
+        { financialOperation: "", Result: 0 }
     ]
 };
 
@@ -86,12 +71,19 @@ export const Home = () => {
     const [modalOpen, setModalOpen] = useState(false)
     const [news, setNews] = useState()
     const [results, setResults] = useState()
+    const [resultsCarregado, setResultsCarregado] = useState(false)
     const navigate = useNavigate()
 
     async function getWalletData(userId) {
         const response = await fetch(`/Wallet?id=${userId}&year=2024&month=${valorReducer.valor}`);
         return await response.json();
     }
+    async function getResults(userId){
+        const result = await fetch(`Wallet/GetPeriodResult?userId=${userId}`)
+        const data = await result.json();
+       return data;
+    }
+
 
     useEffect(() => {
         async function initialize() {
@@ -105,9 +97,18 @@ export const Home = () => {
                     const userRoles = await authService.getUserRoles();
                     setIsAdmin(userRoles.includes('Admin'));
                   
-                    const walletData = await getWalletData(user.sub);
+                    try{
+                        const walletData = await getWalletData(user.sub);
                     setResponse(walletData);
+                    }
+                    catch{
+                        setResponse(props)
+                    }
                     console.log('wallet',walletData)
+                    
+                        const resultados = await getResults(user.sub)
+                        setResults(resultados)
+                    
                    
                 }
                
@@ -136,17 +137,13 @@ export const Home = () => {
             console.log(data)
             setNews(data)
         }
-        async function getByperiod(){
-            const result = await fetch(`Wallet/GetPeriodResult?userId=${userId}&year=2024&month=${valorReducer.valor}`)
-            const data = await result.json();
-            console.log('Result: ', data)
-            setResults(data)
-        }
+       
+        
+       
 
         initialize();
         fetchUserData();
         fetchNews();
-        getByperiod()
     }, [valorReducer.valor]);
 
     const estiloPersonalizado = {
@@ -212,7 +209,7 @@ export const Home = () => {
                     </div>
                     <div className="row flex" style={rowStyle}>
                         <div className="col-lg-6 col-sm-12">
-                            <BarChart props={results} />
+                            <BarChart props={results.periodResults} />
                         </div>
                         <div className="col-lg-6 col-sm-12">
                             <News props={news} />
