@@ -4,6 +4,8 @@ namespace MyWallet.Interfaces;
 
 public interface INewsService
 {
-    Task<List<SimplifiedNewsDTO>> GetNewsByDateAsync(int year, int month);
+    Task<List<NewsDTO>> GetNewsByDateAsync();
     Task CreateNewsAsync(NewsDTO news);
+    Task UpdateNewsAsync(NewsDTO news);
+    Task DeleteNewsAsync(string newsId);
 }

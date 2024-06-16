@@ -13,17 +13,18 @@ public class NewsService : INewsService
     public NewsService(ApplicationDbContext db)
         => _db = db;
     
-    public async Task<List<SimplifiedNewsDTO>> GetNewsByDateAsync(int year, int month)
+    public async Task<List<NewsDTO>> GetNewsByDateAsync()
     {
-        var news = await _db.News.Where(x => x.Year == year && x.Month == month).ToListAsync();
+        var news = await _db.News.ToListAsync();
         
-        var newsDto = new List<SimplifiedNewsDTO>();
+        var newsDto = new List<NewsDTO>();
         
         if(news.Any())
             news.ForEach(
                 x => newsDto.Add(
-                    new SimplifiedNewsDTO
+                    new NewsDTO
                     {
+                        NewsId = x.Id,
                         Title = x.Title,
                         Body = x.Body
                     }));
@@ -35,13 +36,36 @@ public class NewsService : INewsService
     {
         var newToCreate = new News
         {
-            Year = news.Year,
-            Month = news.Month,
             Title = news.Title,
             Body = news.Body
         };
         
         await _db.News.AddAsync(newToCreate);
+        await _db.SaveChangesAsync();
+    }
+
+    public async Task UpdateNewsAsync(NewsDTO news)
+    {
+        var newsToUpdate = await _db.News.FindAsync(news.NewsId);
+
+        if (newsToUpdate is null)
+            throw new KeyNotFoundException("Informação não encontrada.");
+        
+        newsToUpdate.Body = news.Body;
+        newsToUpdate.Title = news.Title;
+
+        _db.News.Update(newsToUpdate);
+        await _db.SaveChangesAsync();
+    }
+
+    public async Task DeleteNewsAsync(string newsId)
+    {
+        var news = await _db.News.FindAsync(newsId);
+        
+        if(news is null)
+            throw new KeyNotFoundException("Informação não encontrada.");
+
+        _db.News.Remove(news);
         await _db.SaveChangesAsync();
     }
 }

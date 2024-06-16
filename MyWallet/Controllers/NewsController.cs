@@ -14,16 +14,63 @@ public class NewsController : ControllerBase
         => _newsService = newsService;
 
     [HttpGet]
-    public async Task<List<SimplifiedNewsDTO>> GetNewsByDate([FromQuery] int year, [FromQuery] int month)
+    public async Task<IActionResult> GetNews()
     {
-        var news = await _newsService.GetNewsByDateAsync(year, month);
+        try
+        {
+            var news = await _newsService.GetNewsByDateAsync();
 
-        return news;
+            return Ok(news);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
     [HttpPost]
-    public async Task CreateNews([FromBody] NewsDTO news)
+    public async Task<IActionResult> CreateNews([FromBody] NewsDTO news)
     {
-        await _newsService.CreateNewsAsync(news);
+        try
+        {
+            await _newsService.CreateNewsAsync(news);
+
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest();
+        }
+    }
+    
+    [HttpPut]
+    public async Task<IActionResult> UpdateNews([FromBody] NewsDTO news)
+    {
+        try
+        {
+            await _newsService.UpdateNewsAsync(news);
+
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest();
+        }
+    }
+    
+    [HttpDelete]
+    public async Task<IActionResult> DeleteNews([FromBody] string newsId)
+    {
+        try
+        {
+            await _newsService.DeleteNewsAsync(newsId);
+
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest();
+        }
     }
 }

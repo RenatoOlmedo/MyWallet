@@ -112,7 +112,7 @@ export const ModalWallet = ({userProps,userId,yearProps, monthProps, open,onClos
                 <hr />
                 <div className="deposits pt-3">
                     <div className="text-start mb-3">
-                        <p><strong>Id do depósito {wallet.deposits[index].depositId}</strong></p>
+                        {/*<p><strong>Id do depósito {wallet.deposits[index].depositId}</strong></p>*/}
                         <label className="form-label" htmlFor={`valueDeposit_${index }`}>Valor do depósito</label>
                         <div className="input-group">
                        
@@ -174,8 +174,8 @@ const arraySaques = (<>
                 <hr />
                 <div className="deposits pt-3">
                     <div className="text-start mb-3">
-                        <p><strong>Id do withdraw {wallet.withdraws[index].withdrawId}</strong></p>
-                        <label className="form-label" htmlFor={`valueWithdraw_${index }`}>Valor do withdraw</label>
+                        {/*<p><strong>Id do withdraw {wallet.withdraws[index].withdrawId}</strong></p>*/}
+                        <label className="form-label" htmlFor={`valueWithdraw_${index }`}>Valor do Saque</label>
                         <div className="input-group">
                        
                         <input
@@ -225,7 +225,7 @@ const arraySaques = (<>
                ...prevWallet,
                withdraws: [...prevWallet.withdraws, newWithdraw]
            }));
-       }} className="btn btn-danger px-2 py-2 rounded-5 mb-5">Adicionar withdraw</button>
+       }} className="btn btn-danger px-2 py-2 rounded-5 mb-5">Adicionar Saque</button>
                </div></>)
 
 const arrayOperations = (<>
@@ -235,7 +235,7 @@ const arrayOperations = (<>
             <hr />
             <div className="operations pt-3">
                 <div className="text-start mb-3">
-                    <p><strong>Id da operação {wallet.operations[index].operationId}</strong></p>
+                    {/*<p><strong>Id da operação {wallet.operations[index].operationId}</strong></p>*/}
                     <label className="form-label" htmlFor={`nameOperation_${index }`}>Nome da operação</label>
                     <div className="input-group">
                    

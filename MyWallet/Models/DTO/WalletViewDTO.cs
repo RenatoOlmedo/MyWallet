@@ -21,12 +21,6 @@ public class SimplifiedOperationDTO
     public decimal Result { get; set; }
 }
 
-public class SimplifiedNewsDTO
-{
-    public string Title { get; set; }
-    public string Body { get; set; }
-}
-
 public class PeriodResultDTO
 {
     public int Year { get; set; }
