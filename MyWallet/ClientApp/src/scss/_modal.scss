@@ -68,7 +68,17 @@
     position: fixed;
     bottom: 0;
     left: 0;
-    padding: 1rem 6rem;
+    padding: 1rem 5rem;
     z-index: 13;
     border-radius: 0px 10px 0px 0;
+    width: auto;
+}
+
+.rdw-editor-main {
+    background-color: #fff;
+    padding: 1rem;
+}
+
+.rdw-editor-toolbar{
+    margin-bottom: 0px;
 }

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { RetornoModal } from "./RetornoModal";
 
 
 export const ModalWallet = ({userProps,userId,yearProps, monthProps, open,onClose, type}) =>{
@@ -474,7 +475,7 @@ const arrayOperations = (<>
 
     return (
         <>
-            <div className={`retornoFetch bg-${retornoModal.cor} ${retornoModal.open ? '' : 'd-none'}`}><p className="text-white mb-0">{retornoModal.texto}</p></div>
+           <RetornoModal corProps={retornoModal.cor} textoProps={retornoModal.texto} openProps={retornoModal.open} />
            <div class={`modal ${opened ? '' : 'fechada'}`}>
             <div class="fecha-modal" onClick={fecharModal}></div>
                 <div class="container conteudo-modal p-lg-5 py-3">
