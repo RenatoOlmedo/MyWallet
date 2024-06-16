@@ -16,6 +16,6 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
     public DbSet<Wallet> Wallets { get; set; }
     public DbSet<Operation> Operations { get; set; }
     public DbSet<News> News { get; set; }
-    public DbSet<ExpectedOutcome> ExpectedOutcomes { get; set; }
-    public DbSet<PeriodResult> PeriodResult { get; set; }
+    public DbSet<Withdraw> Withdraws { get; set; }
+    public DbSet<Deposit> Deposits { get; set; }
 }

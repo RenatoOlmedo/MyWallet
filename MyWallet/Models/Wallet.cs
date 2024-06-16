@@ -8,12 +8,8 @@ public class Wallet
     public string Id { get; set; } = Guid.NewGuid().ToString();
     public ApplicationUser User { get; set; }
     public List<Operation>? Operations { get; set; }
-    public List<ExpectedOutcome>? ExpectedOutcomes { get; set; }
     public int Year { get; set; }
     public int Month { get; set; }
-    public decimal AmountInvested { get; set; }
-    public decimal Deposit { get; set; }
-    public decimal Withdraw { get; set; }
-    public decimal Profit { get; set; }
-    public decimal CurrentHeritage { get; set; }
+    public List<Deposit>? Deposit { get; set; }
+    public List<Withdraw>? Withdraw { get; set; }
 }

@@ -1,5 +1,4 @@
-﻿using MyWallet.Models;
-using MyWallet.Models.DTO;
+﻿using MyWallet.Models.DTO;
 
 namespace MyWallet.Interfaces;
 
@@ -12,5 +11,4 @@ public interface IWalletService
     Task CreateNewWalletAsync(WalletDTO wallet);
     Task DeleteWalletAsync(string walletId);
     Task<List<PeriodResultDTO>> GetPeriodResultByUserAsync(string userId, int year, int month);
-    Task CreatePeriodResultAsync(string userId, PeriodResultDTO periodResultDto);
 }

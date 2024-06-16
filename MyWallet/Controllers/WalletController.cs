@@ -146,20 +146,4 @@ public class WalletController : ControllerBase
             return BadRequest(e);
         }
     }
-
-    [HttpPost]
-    [Route("CreatePeriodResul")]
-    public async Task<IActionResult> CreatePeriodResult([FromQuery] string userId, [FromBody] PeriodResultDTO periodResult)
-    {
-        try
-        {
-            await _walletService.CreatePeriodResultAsync(userId, periodResult);
-            
-            return Ok();
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e);
-        }
-    }
 }
