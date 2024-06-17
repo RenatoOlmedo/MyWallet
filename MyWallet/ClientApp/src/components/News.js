@@ -8,7 +8,7 @@ export class News extends Component {
 
         return (
             <div className="card">
-                <h5 className="card-title">{title}</h5>
+                <h5 className="card-title  ps-3 pt-3">{title}</h5>
                 <div className="card-body">
                     <ul className="list-group">
                         {props.map((prop, index) => (

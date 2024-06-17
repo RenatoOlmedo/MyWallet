@@ -478,7 +478,7 @@ const arrayOperations = (<>
 
 
         <div className="text-center">
-            <button type="submit" className="btn btn-primary px-5 py-2 rounded-5">Editar</button>
+            <button type="submit" className="btn btn-primary px-5 py-2 rounded-5">Salvar</button>
         </div>
 
 

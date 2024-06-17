@@ -51,7 +51,7 @@ export const UserWallet = () =>{
             <div class="container pt-5">
                 <div class="row justify-content-center">
                     <div className="col-12">
-                        <a href="/" className="btn-voltar">Voltar</a>
+                        <a href="/" className="-btn-voltar text-white">Voltar</a>
                     </div>
                     <div class="col-12">
                         <h1 class="text-center" >Carteira de {userName}</h1>
