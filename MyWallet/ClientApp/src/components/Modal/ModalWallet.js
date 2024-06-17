@@ -425,14 +425,17 @@ const arrayOperations = (<>
             </div>
         </div> */}
 
-        <div className="text-start mb-3">
+        <div className="row">
+            
+        <div className="text-start mb-3 col-md-6 col-12">
             <label className="form-label" htmlFor="year">Ano da operação</label>
             <input type="number" className="form-control" id="year" value={wallet.year} onChange={(e) => setWallet({...wallet, year:parseInt(e.target.value)})}/>
         </div>
 
-        <div className="text-start mb-3">
+        <div className="text-start mb-3 col-md-6 col-12">
             <label className="form-label" htmlFor="month">Mês da operação</label>
             <input type="number" className="form-control" id="month" value={wallet.month} onChange={(e) => setWallet({...wallet, month:parseInt(e.target.value)})}/>
+        </div>
         </div>
         
         {/* <div className="text-start mb-3">
@@ -440,12 +443,18 @@ const arrayOperations = (<>
             <input className="form-control" id="totalInvestido" value={wallet.amountInvested} onChange={(e) => setWallet({...wallet, amountInvested:e.target.value})}/>
         </div> */}
 
-           {/* array de depositos */}
+        <div className="row">
+            <div className="col-md-6 col-12">
+                  {/* array de depositos */}
             
-          {arrayDepositos}
+                  {arrayDepositos}
+            </div>
 
-        {/*array de withdraws*/}
-          {arraySaques}
+            <div className="col-md-6 col-12">
+                      {/*array de withdraws*/}
+            {arraySaques}
+            </div>
+        </div>
 
         {/* <div className="text-start mb-3">
             <label className="form-label" htmlFor="lucro">Resultado</label>
