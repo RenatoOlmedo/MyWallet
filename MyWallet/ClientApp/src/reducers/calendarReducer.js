@@ -1,7 +1,7 @@
-const mes = new Date().getMonth();
+const mes = new Date().getMonth() + 1;
 
 const initialState = {
-    valor : (mes + 1)
+    valor : 10  
 }
 
 const valorReducer = (state = initialState, action)=>{
@@ -9,7 +9,7 @@ const valorReducer = (state = initialState, action)=>{
         case "alterar":
             return {...state, valor: action.payload};
         default:
-            return state;
+            return initialState;
     }
 }
 

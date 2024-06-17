@@ -14,30 +14,6 @@ const rowStyle = {
     display: 'flex'
 };
 
-const props = {
-    deposit: 0,
-    amountInvested: 0,
-    currentHeritage: 0,
-    withdraw: 0,
-    profit: 0,
-    Month: "Abril",
-    result: 0,
-    completedOperations: [
-        { financialOperation: "", result: 0 },
-        { financialOperation: "", result: 0 },
-        { financialOperation: "", result: 0 }
-    ],
-    onGoingOperations: [
-        { financialOperation: "", result: 0 },
-        { financialOperation: "", result: 0 },
-        { financialOperation: "", result: 0 }
-    ],
-    expectedOutcome: [
-        { financialOperation: "", Result: 0 },
-        { financialOperation: "", Result: 0 },
-        { financialOperation: "", Result: 0 }
-    ]
-};
 
 
 // Wallet?id=47c461ef-cbf3-4013-887a-0233b1568c6d&year=2024&month=6
@@ -74,8 +50,37 @@ export const Home = () => {
     const [resultsCarregado, setResultsCarregado] = useState(false)
     const navigate = useNavigate()
 
+
+    const props = {
+        user:response.user,
+        deposit: 'No DATA',
+        amountInvested: 'No DATA',
+        currentHeritage: 'No DATA',
+        withdraw: 'No DATA',
+        profit: 'No DATA',
+        Month: "Abril",
+        result: 'No DATA',
+        completedOperations: [
+            { financialOperation: "", result: 'No DATA' },
+            { financialOperation: "", result: 'No DATA' },
+            { financialOperation: "", result: 'No DATA' }
+        ],
+        onGoingOperations: [
+            { financialOperation: "No Data", result: 'No DATA' },
+            { financialOperation: "No Data", result: 'No DATA' },
+            { financialOperation: "No Data", result: 'No DATA' }
+        ],
+        expectedOutcome: [
+            { financialOperation: "No Data", Result: 'No DATA' },
+            { financialOperation: "No Data", Result: 'No DATA' },
+            { financialOperation: "No Data", Result: 'No DATA' }
+        ]
+    };
+    
+  
     async function getWalletData(userId) {
-        const response = await fetch(`/Wallet?id=${userId}&year=2024&month=${valorReducer.valor}`);
+        console.log(`valor reducer`, valorReducer.valor)
+        const response = await fetch(`/Wallet?id=${userId}&year=2024&month=${valorReducer.valor }`);
         return await response.json();
     }
     async function getResults(userId){

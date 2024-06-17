@@ -15,7 +15,7 @@ const Calendar = ({valor, alterarValor}) => {
         const month = date.getMonth();
         dispatch({
             type:"alterar",
-            payload:month
+            payload:(month + 1)
         })
         setMes(month)
     },[])
@@ -23,7 +23,7 @@ const Calendar = ({valor, alterarValor}) => {
     function ChangeCalendar(valor) {
         dispatch({
             type: "alterar",
-            payload: valor
+            payload: (valor )
         })
         setMes(valor)
         console.log(valor)
