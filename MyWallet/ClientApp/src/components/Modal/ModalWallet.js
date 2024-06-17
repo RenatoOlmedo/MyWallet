@@ -312,8 +312,8 @@ const arrayOperations = (<>
                         id={`statusOperation_${index}`}
                         className="form-select"
                     >
-                        <option value={1}>Completa</option>
-                        <option value={2}>Em andamento</option>
+                        <option selected={wallet.operations[index].status === 1} value={1}>Completa</option>
+                        <option selected={wallet.operations[index].status === 2} value={2}>Em andamento</option>
                     </select>
                 </div>
                     </div>
