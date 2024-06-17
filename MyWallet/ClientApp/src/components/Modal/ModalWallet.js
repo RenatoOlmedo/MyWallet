@@ -92,6 +92,7 @@ export const ModalWallet = ({userProps,userId,yearProps, monthProps, open,onClos
             if(response.ok){
                 setCarregado(true)
                 setRetornoModal({cor:'success',texto:'Sucesso!',open:true})
+                fecharModal()
                 setTimeout(function(){
                     setRetornoModal({open:false})
                 },2000)
@@ -115,7 +116,7 @@ export const ModalWallet = ({userProps,userId,yearProps, monthProps, open,onClos
                         {/*<p><strong>Id do depósito {wallet.deposits[index].depositId}</strong></p>*/}
                         <label className="form-label" htmlFor={`valueDeposit_${index }`}>Valor do depósito</label>
                         <div className="input-group">
-                       
+                        <span class="input-group-text">R$</span>
                         <input
                         type="number"
                         step="any"
@@ -177,7 +178,7 @@ const arraySaques = (<>
                         {/*<p><strong>Id do withdraw {wallet.withdraws[index].withdrawId}</strong></p>*/}
                         <label className="form-label" htmlFor={`valueWithdraw_${index }`}>Valor do Saque</label>
                         <div className="input-group">
-                       
+                        <span class="input-group-text">R$</span>
                         <input
                          type="number"
                         step="any"
@@ -257,6 +258,7 @@ const arrayOperations = (<>
                 <div className="text-start mb-3">
                     <label className="form-label" htmlFor={`expectedOperation_${index }`}>Expectativa da operação</label>
                     <div className="input-group">
+                    <span class="input-group-text">R$</span>
                     <input
                      type="number"
                         step="any"
@@ -275,7 +277,7 @@ const arrayOperations = (<>
                 </div>
 
                     <div className="row">
-                    <div className="text-start mb-3 col-6">
+                    <div className="text-start mb-3 col-md-6 col-12">
                     <label className="form-label" htmlFor={`resultOperation_${index}`}>Resultado da operação</label>
                     <div className="input-group">
                     <span class="input-group-text">R$</span>
@@ -296,7 +298,7 @@ const arrayOperations = (<>
                     </div>
                 </div>
 
-                <div className="text-start mb-3 col-6">
+                <div className="text-start mb-3 col-md-6 col-12">
                     <label className="form-label" htmlFor={`statusOperation_${index}`}>Status da operação</label>
                     <select
                     required
@@ -377,25 +379,26 @@ const arrayOperations = (<>
 
 
 
-        {/* array de depositos */}
-            {arrayDepositos}
+            <div className="row">
+                    {/* array de depositos */}
+                    <div className="col-md-6 col-12">
+                        <h2 className="text-start"><strong>Depósitos</strong></h2>
+                        {arrayDepositos}
+                    </div>
 
-       {/*array de withdraws*/}
-            {arraySaques}
-        
+                     {/*array de withdraws*/}
+                    <div className="col-md-6 col-12">
+                        <h2 className="text-start"><strong>Saques</strong></h2>
+                        {arraySaques}
+                    </div>
+                
+            </div>
 
         {/*array de operacoes*/}
-            {arrayOperations}
-
-        <div className="text-start mb-3">
-            <label className="form-label" htmlFor="saque">Saque</label>
-            <div className="input-group">
-            <span class="input-group-text">R$</span>
-            <input  type="number"
-                        step="any" className="form-control" id="saque" value={wallet.withdraw} onChange={(e) => setWallet({...wallet, withdraw:parseFloat(e.target.value)})}/>
+            <div className="">
+                <h2 className="text-start"><strong>Operações</strong></h2>
+                {arrayOperations}
             </div>
-        </div>
-
     
 
         <div className="text-center">

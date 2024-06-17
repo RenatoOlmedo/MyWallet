@@ -62,17 +62,11 @@ export const Home = () => {
         result: 'No DATA',
         completedOperations: [
             { financialOperation: "", result: 'No DATA' },
-            { financialOperation: "", result: 'No DATA' },
-            { financialOperation: "", result: 'No DATA' }
         ],
         onGoingOperations: [
-            { financialOperation: "No Data", result: 'No DATA' },
-            { financialOperation: "No Data", result: 'No DATA' },
             { financialOperation: "No Data", result: 'No DATA' }
         ],
         expectedOutcome: [
-            { financialOperation: "No Data", Result: 'No DATA' },
-            { financialOperation: "No Data", Result: 'No DATA' },
             { financialOperation: "No Data", Result: 'No DATA' }
         ]
     };

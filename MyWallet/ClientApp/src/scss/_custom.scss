@@ -157,3 +157,32 @@ code {
   max-height: 80vh;
   overflow-y: auto;
 }
+
+
+.btn-voltar{
+  position: relative;
+  color: white;
+  padding-left: 20px;
+  &::before{
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 15px;
+    height: 2px;
+    background-color: white;
+    transform: rotate(325deg);
+    border-radius: 20px;
+  }
+
+  &::after{
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 30%;
+    width: 15px;
+    height: 2px;
+    background-color: white;
+    transform: rotate(-325deg);
+  }
+}
