@@ -211,7 +211,7 @@ export const Home = () => {
                             <BarChart props={results.periodResults} />
                         </div>
                         <div className="col-lg-6 col-sm-12">
-                            <News props={news} />
+                            <News title={"Informações"} props={news} />
                         </div>
                     </div>
                 </div>

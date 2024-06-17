@@ -4,10 +4,11 @@ export class News extends Component {
     static displayName = News.name;
 
     render() {
-        const { props } = this.props;
+        const { title, props } = this.props;
 
         return (
             <div className="card">
+                <h5 className="card-title">{title}</h5>
                 <div className="card-body">
                     <ul className="list-group">
                         {props.map((prop, index) => (
