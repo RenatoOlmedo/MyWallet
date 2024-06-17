@@ -16,7 +16,7 @@ export const ModalWallet = ({userProps,userId,yearProps, monthProps, open,onClos
             operationId:"",
             result:"",
             financialOperation:"",
-            status:0,
+            status:"",
             expectedOutcome:""
         }],
         year:"",
