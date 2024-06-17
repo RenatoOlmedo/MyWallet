@@ -203,7 +203,7 @@ export const Home = () => {
                             <CardList title={"Operações em Andamento"} ops={response.onGoingOperations} />
                         </div>
                         <div className="col-lg-3 col-sm-6 d-flex flex-column">
-                            <CardList title={"Lucro Provisório"} ops={response.expectedOutcome} />
+                            <CardList title={"Resultado Esperado"} ops={response.expectedOutcome} />
                         </div>
                     </div>
                     <div className="row flex" style={rowStyle}>
