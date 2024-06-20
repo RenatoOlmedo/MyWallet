@@ -4,7 +4,6 @@ using MyWallet.Interfaces;
 using MyWallet.Models;
 using MyWallet.Models.DTO;
 using MyWallet.Models.Enums;
-using static System.Decimal;
 
 namespace MyWallet.Services;
 
@@ -82,9 +81,19 @@ public class WalletService : IWalletService
             .Where(x => x.User == user)
             .ToListAsync();
 
+        var heritage = await _db.Heritage
+            .Include(i => i.Investments)
+            .FirstOrDefaultAsync(u => 
+                u.User == user);
+        
         var totalDeposits = 0M;
         var totalWithdraws = 0M;
         var profit = 0M;
+        var currentHeritage = 0M;
+
+        if (heritage is not null)
+            currentHeritage = heritage.Balance + heritage.Investments
+                .Sum(r => r.Result);
 
         foreach (var userWallet in walletData)
         {
@@ -104,8 +113,8 @@ public class WalletService : IWalletService
             Deposit = totalDeposits,
             Withdraw = totalWithdraws,
             Profit = profit,
-            AmountInvested = totalDeposits - totalWithdraws,
-            CurrentHeritage = totalDeposits - totalWithdraws + profit,
+            AmountInvested = totalDeposits - totalWithdraws + profit,
+            CurrentHeritage = currentHeritage,
             Month = ((MonthsEnum)wallet.Month).ToString(),
             Result = result,
             CompletedOperations = completedDto,
@@ -539,7 +548,7 @@ public class WalletService : IWalletService
             u.User == user)
             .Include(o => o.Operations)
             .OrderByDescending(y => y.Year)
-            .ThenByDescending(m => m.Month)
+            .ThenBy(m => m.Month)
             .Take(12)
             .ToListAsync();
 
@@ -564,5 +573,38 @@ public class WalletService : IWalletService
         }
         
         return periodDto;
+    }
+
+    public async Task<HeritageDTO> GetInvestmentsByUserAsync(string userId)
+    {
+        var user = await _db.Users.FindAsync(userId);
+
+        if (user is null)
+            throw new KeyNotFoundException("Usuário não encontrado");
+
+        var heritage = await _db.Heritage
+            .Include(i => i.Investments)
+            .FirstOrDefaultAsync(x => x.User == user);
+
+        if (heritage is null)
+            return new HeritageDTO();
+        
+        var heritageDto = new HeritageDTO
+        {
+            HeritageId = heritage.Id,
+            Balance = heritage.Balance
+        };
+
+        var investmentsList = new List<InvestmentDTO>();
+        
+        heritageDto.Investments.ForEach(x => investmentsList.Add(new InvestmentDTO
+        {
+            Operation = x.Operation,
+            Result = x.Result
+        }));
+
+        heritageDto.Investments = investmentsList;
+        
+        return heritageDto;
     }
 }

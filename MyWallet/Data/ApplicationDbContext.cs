@@ -18,4 +18,6 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
     public DbSet<News> News { get; set; }
     public DbSet<Withdraw> Withdraws { get; set; }
     public DbSet<Deposit> Deposits { get; set; }
+    public DbSet<Investments> Investments { get; set; }
+    public DbSet<CurrentHeritage> Heritage { get; set; }
 }

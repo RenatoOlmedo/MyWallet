@@ -146,4 +146,20 @@ public class WalletController : ControllerBase
             return BadRequest(e);
         }
     }
+
+    [HttpGet]
+    [Route("GetInvestments")]
+    public async Task<IActionResult> GetInvestments([FromQuery] string userId)
+    {
+        try
+        {
+            var investments = await _walletService.GetInvestmentsByUserAsync(userId);
+
+            return Ok(investments);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e);
+        }
+    }
 }
