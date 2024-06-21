@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // import { EditorState } from 'draft-js';
 // import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 // import { Editor } from 'react-draft-wysiwyg';
 import { RetornoModal } from "./RetornoModal";
 
-export const ModalNews = ({onClose, open}) =>{
+export const ModalNews = ({onClose, open, typeProps, itemProps}) =>{
 
     const[retornoModal, setRetornoModal] = useState({
         cor:"", 
@@ -12,9 +12,7 @@ export const ModalNews = ({onClose, open}) =>{
         open:false
     })
     const [modalOpen, setModalOpen] = useState(open)
-    // const [editorState, setEditorState] = useState(() =>
-    //     EditorState.createEmpty(),
-    //   );
+    const [item, setItem] = useState(itemProps)
 
     const data = new Date();
       const [news, setNews] = useState({
@@ -26,12 +24,9 @@ export const ModalNews = ({onClose, open}) =>{
       
 
     
-    //   const onEditorStateChange = (newEditorState) => {
-    //     console.log(newEditorState._immutable)
-    //     setEditorState(newEditorState);
-    //     setNews({...news, body:newEditorState.toString('html')})
-    //   };
-
+    useEffect(()=>{
+        console.log(itemProps)
+    },[itemProps])
     function fecharModal(){
         setModalOpen(false)
         onClose()
@@ -62,14 +57,17 @@ export const ModalNews = ({onClose, open}) =>{
         }
     }
 
-return (
+    const tipoModal = typeProps == "update" ? 
     <>
-    <RetornoModal corProps={retornoModal.cor} textoProps={retornoModal.texto} openProps={retornoModal.open}></RetornoModal>
-        <div className={`modal ${open ? "" : 'fechada'}`}>
-            <div class="fecha-modal" onClick={fecharModal}></div>
-              <div className="container conteudo-modal p-lg-5 py-3">
-              <div class="row justify-content-center">
-                    <div className="col-12 text-end position-relative">
+        <div>
+            <p>{item.id}</p>
+        </div>
+    </>
+
+    :
+    <>
+    {/* Modal ADD  */}
+    <div className="col-12 text-end position-relative">
                         <div onClick={fecharModal} className="close"></div>
                     </div>
 
@@ -97,6 +95,16 @@ return (
                        
                     </form>
                     </div>
+    </>
+
+return (
+    <>
+    <RetornoModal corProps={retornoModal.cor} textoProps={retornoModal.texto} openProps={retornoModal.open}></RetornoModal>
+        <div className={`modal ${open ? "" : 'fechada'}`}>
+            <div class="fecha-modal" onClick={fecharModal}></div>
+              <div className="container conteudo-modal p-lg-5 py-3">
+              <div class="row justify-content-center">
+                    {tipoModal}
                 </div>
               </div>
         </div>

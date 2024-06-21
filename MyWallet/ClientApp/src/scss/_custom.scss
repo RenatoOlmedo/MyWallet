@@ -115,6 +115,42 @@ code {
   
     
   }
+
+  .form-select{
+    background-color: #1e1e1e;
+    color: #fff;
+    background-image: url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3e%3cpath fill=%27none%27 stroke=%27%23ffffff%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%272%27 d=%27M2 5l6 6 6-6%27/%3e%3c/svg%3e');
+  }
+
+
+  .table > :not(caption) > * > * {
+    background-color: transparent !important;
+}
+
+thead, tbody, tfoot, tr, td, th {
+    border-color: inherit;
+    border-style: solid;
+    border-width: 15px;
+    border-color: transparent;}
+
+    .table{
+        th,td{
+            text-align: center;
+            color: white;
+        }
+        thead{
+            tr{
+                background-color: transparent !important;
+            }
+        }
+    
+        tr:nth-child(odd){
+            background-color: #333;
+        }
+        tr:nth-child(even){
+            background-color: #8b8b8b;
+        }
+    }
 }
 
 
@@ -185,4 +221,14 @@ code {
     background-color: white;
     transform: rotate(-325deg);
   }
+}
+
+
+.news-body{
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: normal;
 }

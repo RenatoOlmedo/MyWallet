@@ -3,6 +3,7 @@ import { Wallets } from "./Wallets";
 import { FetchData } from "./components/FetchData";
 import { Home } from "./components/Home";
 import {UserWallet} from './components/Wallets/UserWallet'
+import { News } from './components/News/News';
 
 const AppRoutes = [
   {
@@ -22,6 +23,12 @@ const AppRoutes = [
     path: '/wallets/:id',
     requireAuth: true,
     element: <UserWallet />
+  },
+  ,
+  {
+    path: '/news',
+    requireAuth: true,
+    element: <News />
   },
   ...ApiAuthorzationRoutes
 ];
