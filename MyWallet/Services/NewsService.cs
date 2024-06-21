@@ -13,7 +13,7 @@ public class NewsService : INewsService
     public NewsService(ApplicationDbContext db)
         => _db = db;
     
-    public async Task<List<NewsDTO>> GetNewsByDateAsync()
+    public async Task<List<NewsDTO>> GetNewsAsync()
     {
         var news = await _db.News.ToListAsync();
         
@@ -28,6 +28,23 @@ public class NewsService : INewsService
                         Title = x.Title,
                         Body = x.Body
                     }));
+        
+        return newsDto;
+    }
+
+    public async Task<NewsDTO> GetModalNewsAsync(string newsId)
+    {
+        var news = await _db.News.FindAsync(newsId);
+
+        if (news is null)
+            throw new KeyNotFoundException("Notícia não encontrada");
+        
+        var newsDto = new NewsDTO
+        {
+            NewsId = news.Id,
+            Title = news.Title,
+            Body = news.Body
+        };
         
         return newsDto;
     }

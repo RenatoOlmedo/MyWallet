@@ -18,7 +18,24 @@ public class NewsController : ControllerBase
     {
         try
         {
-            var news = await _newsService.GetNewsByDateAsync();
+            var news = await _newsService.GetNewsAsync();
+
+            return Ok(news);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+    
+    [HttpGet]
+    [Route("GetNewsModal")]
+    public async Task<IActionResult> GetNews([FromQuery] string newsId)
+    {
+        try
+        {
+            var news = await _newsService.GetModalNewsAsync(newsId);
 
             return Ok(news);
         }

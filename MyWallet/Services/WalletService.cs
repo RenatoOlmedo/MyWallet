@@ -90,10 +90,16 @@ public class WalletService : IWalletService
         var totalWithdraws = 0M;
         var profit = 0M;
         var currentHeritage = 0M;
+        var balance = 0M;
 
         if (heritage is not null)
+        {
             currentHeritage = heritage.Balance + heritage.Investments
                 .Sum(r => r.Result);
+
+            balance = heritage.Balance;
+        }
+            
 
         foreach (var userWallet in walletData)
         {
@@ -119,7 +125,8 @@ public class WalletService : IWalletService
             Result = result,
             CompletedOperations = completedDto,
             OnGoingOperations = onGoingDto,
-            ExpectedOutcome = expectedDto
+            ExpectedOutcome = expectedDto,
+            Balance = balance
         };
 
         return walletDTO;
