@@ -73,6 +73,10 @@ namespace MyWallet.Areas.Identity.Pages.Account
             [Display(Name = "Email")]
             public string Email { get; set; }
 
+            [Required]
+            [Display(Name = "Nome")]
+            public string UserName { get; set; }
+
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -110,6 +114,7 @@ namespace MyWallet.Areas.Identity.Pages.Account
             
             await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
             await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+            user.UserName = Input.UserName;
 
             var result = await _userManager.CreateAsync(user, Input.Password);
 

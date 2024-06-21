@@ -53,21 +53,21 @@ export const Home = () => {
 
     const props = {
         user:response.user,
-        deposit: 'No DATA',
-        amountInvested: 'No DATA',
-        currentHeritage: 'No DATA',
-        withdraw: 'No DATA',
-        profit: 'No DATA',
+        deposit: 'NÃO HÁ OPERAÇÕES',
+        amountInvested: 'NÃO HÁ OPERAÇÕES',
+        currentHeritage: 'NÃO HÁ OPERAÇÕES',
+        withdraw: 'NÃO HÁ OPERAÇÕES',
+        profit: 'NÃO HÁ OPERAÇÕES',
         Month: "Abril",
-        result: 'No DATA',
+        result: 'NÃO HÁ OPERAÇÕES',
         completedOperations: [
-            { financialOperation: "", result: 'No DATA' },
+            { financialOperation: "", result: 'NÃO HÁ OPERAÇÕES' },
         ],
         onGoingOperations: [
-            { financialOperation: "No Data", result: 'No DATA' }
+            { financialOperation: "NÃO HÁ OPERAÇÕES", result: 'NÃO HÁ OPERAÇÕES' }
         ],
         expectedOutcome: [
-            { financialOperation: "No Data", Result: 'No DATA' }
+            { financialOperation: "NÃO HÁ OPERAÇÕES", Result: 'NÃO HÁ OPERAÇÕES' }
         ]
     };
     
@@ -221,9 +221,7 @@ export const Home = () => {
                 <div className='container'>
                     <div className='row justify-content-center'>
                         <div className='col-12 text-end'>
-                            <button onClick={()=>{
-                                setModalOpen(true)
-                            }} className='btn btn-primary'>Adicionar notícia</button>
+                            <a href='/news' className='btn btn-primary'>Adicionar notícia</a>
                         </div>
 
                         <div className='col-12 mt-5'>
