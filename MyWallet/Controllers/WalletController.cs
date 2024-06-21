@@ -148,14 +148,46 @@ public class WalletController : ControllerBase
     }
 
     [HttpGet]
-    [Route("GetInvestments")]
+    [Route("GetHeritage")]
     public async Task<IActionResult> GetInvestments([FromQuery] string userId)
     {
         try
         {
-            var investments = await _walletService.GetInvestmentsByUserAsync(userId);
+            var investments = await _walletService.GetHeritageByUserAsync(userId);
 
             return Ok(investments);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e);
+        }
+    }
+    
+    [HttpPost]
+    [Route("CreateHeritage")]
+    public async Task<IActionResult> CreateInvestments([FromQuery] string userId, [FromBody] HeritageDTO heritage)
+    {
+        try
+        {
+            await _walletService.CreateHeritageByUserAsync(userId, heritage);
+
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e);
+        }
+    }
+    
+    [HttpPut]
+    [Route("UpdateHeritage")]
+    public async Task<IActionResult> UpdateInvestments([FromQuery] string userId, [FromBody] HeritageDTO heritage)
+    {
+        try
+        {
+            await _walletService.CreateHeritageByUserAsync(userId, heritage);
+
+            return Ok();
         }
         catch (Exception e)
         {

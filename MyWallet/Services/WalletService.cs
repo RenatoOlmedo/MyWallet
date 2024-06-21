@@ -575,7 +575,7 @@ public class WalletService : IWalletService
         return periodDto;
     }
 
-    public async Task<HeritageDTO> GetInvestmentsByUserAsync(string userId)
+    public async Task<HeritageDTO> GetHeritageByUserAsync(string userId)
     {
         var user = await _db.Users.FindAsync(userId);
 
@@ -597,7 +597,7 @@ public class WalletService : IWalletService
 
         var investmentsList = new List<InvestmentDTO>();
         
-        heritageDto.Investments.ForEach(x => investmentsList.Add(new InvestmentDTO
+        heritage.Investments?.ForEach(x => investmentsList.Add(new InvestmentDTO
         {
             Operation = x.Operation,
             Result = x.Result
@@ -606,5 +606,68 @@ public class WalletService : IWalletService
         heritageDto.Investments = investmentsList;
         
         return heritageDto;
+    }
+
+    public async Task CreateHeritageByUserAsync(string userId, HeritageDTO heritage)
+    {
+        var user = await _db.Users.FindAsync(userId);
+
+        if (user is null)
+            throw new KeyNotFoundException("Usuário não encontrado");
+
+        var newInvestments = new List<Investments>();
+
+        heritage.Investments?.ForEach(i => newInvestments.Add(new Investments
+        {
+            Operation = i.Operation,
+            Result = i.Result
+        }));
+
+        var newHeritage = new CurrentHeritage
+        {
+            Balance = heritage.Balance,
+            User = user,
+            Investments = newInvestments
+        };
+
+        await _db.Heritage.AddAsync(newHeritage);
+        await _db.Investments.AddRangeAsync(newInvestments);
+
+        await _db.SaveChangesAsync();
+    }
+
+    public async Task UpdateHeritageByUserAsync(string userId, HeritageDTO heritage)
+    {
+        var user = await _db.Users.FindAsync(userId);
+
+        if (user is null)
+            throw new KeyNotFoundException("Usuário não encontrado");
+
+        var heritageToUpdate = await _db.Heritage
+            .Include(i => i.Investments)
+            .FirstOrDefaultAsync(x => 
+                x.Id == heritage.HeritageId);
+
+        if (heritageToUpdate is null)
+            throw new KeyNotFoundException("Não encontrado");
+        
+        heritageToUpdate.Balance = heritage.Balance;
+        
+        _db.Investments.RemoveRange(heritageToUpdate.Investments);
+
+        var newInvestments = new List<Investments>();
+        
+        heritage.Investments?.ForEach(i => newInvestments.Add(new Investments
+        {
+            Operation = i.Operation,
+            Result = i.Result
+        }));
+
+        heritageToUpdate.Investments = newInvestments;
+        
+        _db.Heritage.Update(heritageToUpdate);
+        await _db.Investments.AddRangeAsync(newInvestments);
+
+        await _db.SaveChangesAsync();
     }
 }
