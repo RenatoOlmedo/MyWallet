@@ -8,10 +8,20 @@ export const News = () =>{
     const [idNews, setIdNews] = useState("");
     const [type, setType] = useState("");
     const [newsUpdate, setNewsUpdate]=useState({
-        idNews:"",
-        titleNews:"",
-        bodyNews:""
+        newsId:"",
+        title:"",
+        body:""
     })
+
+    const modeloNews = {newsId:"",
+        title:"",
+        body:""}
+    const [mudancaEstado, setMudancaEstado] = useState(0)
+
+    const recebeMudanca = (mudanca)=>{
+        setMudancaEstado(mudancaEstado + 1)
+        console.log('Mudaca', mudanca)
+    }
 
     async function getNews(){
         const news = await fetch('/News', {
@@ -22,13 +32,13 @@ export const News = () =>{
     }
 
     useEffect(()=>{
-
+        console.log('Mudou', mudancaEstado)
         async function initialize(){
             var noticias = await getNews();
             setNews(noticias);
         }
         initialize()
-    },[])
+    },[mudancaEstado])
 
     function abreModal(item, type){
         setModalOpen(true)
@@ -48,11 +58,11 @@ export const News = () =>{
           {
             news ? 
           <>
-            <ModalNews onClose={fecharModal} open={modalOpen} typeProps={type} itemProps={newsUpdate} ></ModalNews>
+            <ModalNews mudanca={recebeMudanca} onClose={fecharModal} open={modalOpen} typeProps={type} itemProps={newsUpdate} ></ModalNews>
             <div className="container">
             <div className="row justify-content-center">
                 <div className="col-12 mb-5 text-end">
-                    <button onClick={()=>{abreModal(0, 'add')}} className="btn btn-primary">Adicionar notícia</button>
+                    <button onClick={()=>{abreModal(modeloNews, 'add')}} className="btn btn-primary">Adicionar notícia</button>
                 </div>
             <div class="col-12">
            <div class="table-responsive">
@@ -74,7 +84,7 @@ export const News = () =>{
                                 <button onClick={()=>{abreModal(item, "update")}} className="btn btn-secondary">Editar</button>
                             </td>
                             <td colSpan={4} className="text-center">
-                            <button className="btn  delete"></button>
+                            <button onClick={()=>{abreModal(item, "delete")}} className="btn  delete"></button>
                             </td>
                         </tr>
                     ))}

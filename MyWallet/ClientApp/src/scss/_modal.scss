@@ -7,7 +7,7 @@
     align-self:center;
     justify-content: center;
     position: fixed;
-    min-height: 100vh;
+    min-height: auto;
     padding: 6rem 3rem;
     transition: all .3s;
     @media screen and (max-width:992px){
@@ -19,7 +19,7 @@
         transition: all .3s;
     }
     .fecha-modal{
-        position: absolute;
+        position: fixed;
         left: 0;
         top: 0;
         min-height: 100vh;
