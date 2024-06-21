@@ -30,7 +30,7 @@ export const ModalNews = ({onClose, open, typeProps, itemProps, mudanca}) =>{
         cleanNews()
         setItem(itemProps)
         setNews(itemProps)
-    },[itemProps,typeProps, item])
+    },[item, typeProps])
     
     function fecharModal(){
         setModalOpen(false)
@@ -44,11 +44,11 @@ export const ModalNews = ({onClose, open, typeProps, itemProps, mudanca}) =>{
         var textoOk = ""
         var textoRuim = ""
         switch(tipo){
-            case "update":
+            case "PUT":
                 textoOk = "Noticia atualizada";
                 textoRuim = "Erro ao atualizar notícia"
                 break;
-            case "add":
+            case "POST":
                  textoOk = "Noticia cadastrada";
                 textoRuim = "Erro ao cadastar notícia"
                 break;
@@ -113,69 +113,76 @@ export const ModalNews = ({onClose, open, typeProps, itemProps, mudanca}) =>{
             title:"",
             body:""})
     }
+    var retornoUpdate = "";
+  if(typeProps == "update"){
+    retornoUpdate =  <><div><div className="col-12 text-end position-relative">
+    <div onClick={fecharModal} className="close"></div>
+</div>
 
-    var retornoUpdate =  <><div><div className="col-12 text-end position-relative">
-                    <div onClick={fecharModal} className="close"></div>
-                </div>
+<div className="col-12 mt-5">
+<form onSubmit={(e) =>handleSubmit(e, 'PUT')}>
+    <div className=" col-12 mb-4">
+        <label htmlFor="tituloNews" className="form-label">Título da notícia</label>
+       <div>
+       <input required value={news.title} onChange={(e)=>{
+        setNews({...news,title:e.target.value})
+       }} id="tituloNews" type="text" className="form-control"></input> 
+       </div>
+    </div>
+  <div className="mb-3">
+    <label htmlFor="bodyNoticia" className="form-label">Corpo da notícia</label>
+    <textarea required className="form-control" id="bodyNoticia" value={news.body} onChange={(e)=>{
+        setNews({...news, body:e.target.value})
+    }}>
 
-                <div className="col-12 mt-5">
-                <form onSubmit={(e) =>handleSubmit(e, 'PUT')}>
-                    <div className=" col-12 mb-4">
-                        <label htmlFor="tituloNews" className="form-label">Título da notícia</label>
-                       <div>
-                       <input required value={news.title} onChange={(e)=>{
-                        setNews({...news,title:e.target.value})
-                       }} id="tituloNews" type="text" className="form-control"></input> 
-                       </div>
-                    </div>
-                  <div className="mb-3">
-                    <label htmlFor="bodyNoticia" className="form-label">Corpo da notícia</label>
-                    <textarea required className="form-control" id="bodyNoticia" value={news.body} onChange={(e)=>{
-                        setNews({...news, body:e.target.value})
-                    }}>
+    </textarea>
+  </div>
+    <div className="col-12 text-center">
+    <button type="submit" className="btn btn-primary">Salvar</button>
+    </div>
+   
+</form>
+</div>
+</div></>
+  }
 
-                    </textarea>
-                  </div>
-                    <div className="col-12 text-center">
-                    <button type="submit" className="btn btn-primary">Salvar</button>
-                    </div>
-                   
-                </form>
-                </div>
-    </div></>
+  var retornoAdd = ""
+  if(typeProps == "add"){
+    retornoAdd = <>{/* Modal ADD  */}
+    <div className="col-12 text-end position-relative">
+        <div onClick={fecharModal} className="close"></div>
+    </div>
 
-var retornoAdd = <>{/* Modal ADD  */}
-                <div className="col-12 text-end position-relative">
-                    <div onClick={fecharModal} className="close"></div>
-                </div>
+    <div className="col-12 mt-5">
+    <form onSubmit={(e) => handleSubmit(e, 'POST')}>
+        <div className=" col-12 mb-4">
+            <label htmlFor="tituloNews" className="form-label">Título da notícia</label>
+           <div>
+           <input required value={news.title} onChange={(e)=>{
+            setNews({...news,title:e.target.value})
+           }} id="tituloNews" type="text" className="form-control"></input> 
+           </div>
+        </div>
+      <div className="mb-3">
+        <label htmlFor="bodyNoticia" className="form-label">Corpo da notícia</label>
+        <textarea required className="form-control" id="bodyNoticia" value={news.body} onChange={(e)=>{
+            setNews({...news, body:e.target.value})
+        }}>
 
-                <div className="col-12 mt-5">
-                <form onSubmit={(e) => handleSubmit(e, 'POST')}>
-                    <div className=" col-12 mb-4">
-                        <label htmlFor="tituloNews" className="form-label">Título da notícia</label>
-                       <div>
-                       <input required value={news.title} onChange={(e)=>{
-                        setNews({...news,title:e.target.value})
-                       }} id="tituloNews" type="text" className="form-control"></input> 
-                       </div>
-                    </div>
-                  <div className="mb-3">
-                    <label htmlFor="bodyNoticia" className="form-label">Corpo da notícia</label>
-                    <textarea required className="form-control" id="bodyNoticia" value={news.body} onChange={(e)=>{
-                        setNews({...news, body:e.target.value})
-                    }}>
+        </textarea>
+      </div>
+        <div className="col-12 text-center">
+        <button type="submit" className="btn btn-primary">Salvar</button>
+        </div>
+       
+    </form>
+    </div>
+</>
+  }
 
-                    </textarea>
-                  </div>
-                    <div className="col-12 text-center">
-                    <button type="submit" className="btn btn-primary">Salvar</button>
-                    </div>
-                   
-                </form>
-                </div>
-    </>
-
-var retornoDelete = <>
+  var retornoDelete = ""
+if(typeProps == "delete"){
+     retornoDelete = <>
 <div className="col-12 text-end position-relative">
                     <div onClick={fecharModal} className="close"></div>
                 </div>
@@ -185,6 +192,7 @@ var retornoDelete = <>
         <button onClick={DeleteNews} className="btn btn-primary mt-3">Deletar</button>
     </div>
         </>
+}
 
 
     var tipoModal = "";
