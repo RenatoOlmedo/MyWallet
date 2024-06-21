@@ -4,10 +4,10 @@ export class News extends Component {
     static displayName = News.name;
 
     render() {
-        const { title, props } = this.props;
+        const { title, props, classeProps } = this.props;
 
         return (
-            <div className="card">
+            <div className={`card ${classeProps}`}>
                 <h5 className="card-title  ps-3 pt-3">{title}</h5>
                 <div className="card-body">
                     <ul className="list-group">

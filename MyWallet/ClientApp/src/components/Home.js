@@ -46,12 +46,14 @@ export const Home = () => {
     const [response, setResponse] = useState("")
     const [modalOpen, setModalOpen] = useState(false)
     const [news, setNews] = useState()
-    const [results, setResults] = useState()
+    const [results, setResults] = useState();
+    const [user, setUser] = useState()
     const [resultsCarregado, setResultsCarregado] = useState(false)
     const navigate = useNavigate()
 
 
     const props = {
+        balance:'NÃO HÁ OPERAÇÕES',
         user:response.user,
         deposit: 'NÃO HÁ OPERAÇÕES',
         amountInvested: 'NÃO HÁ OPERAÇÕES',
@@ -72,9 +74,8 @@ export const Home = () => {
     };
     
   
-    async function getWalletData(userId) {
-        console.log(`valor reducer`, valorReducer.valor)
-        const response = await fetch(`/Wallet?id=${userId}&year=2024&month=${valorReducer.valor }`);
+    async function getWalletData(userId, valor) {
+        const response = await fetch(`/Wallet?id=${userId}&year=${valor.ano}&month=${valor.mes}`);
         return await response.json();
     }
     async function getResults(userId){
@@ -86,18 +87,21 @@ export const Home = () => {
 
     useEffect(() => {
         async function initialize() {
-            console.log("mes", valorReducer.valor)
+            console.log("ano", valorReducer.ano)
             try {
                 const user = await authService.getUser();
                 console.log('User:', user);
                 if (user) {
+                    console.log('user', user)
+                    setUser(user)
                     setLogado(true)
                     setUserId(user.sub);
                     const userRoles = await authService.getUserRoles();
                     setIsAdmin(userRoles.includes('Admin'));
                   
                     try{
-                        const walletData = await getWalletData(user.sub);
+                        const walletData = await getWalletData(user.sub, valorReducer);
+                        console.log('response', walletData)
                     setResponse(walletData);
                     }
                     catch{
@@ -143,7 +147,7 @@ export const Home = () => {
         initialize();
         fetchUserData();
         fetchNews();
-    }, [valorReducer.valor]);
+    }, [valorReducer.ano, valorReducer.mes]);
 
     const estiloPersonalizado = {
         flex: '1'
@@ -167,8 +171,11 @@ export const Home = () => {
             {!isAdmin ? (
                 <div>
                     <div className="row align-items-center">
+                        <div className='col-12'>
+                            <h3 className='h3-user text-black mb-3'>Bem vindo {user.name}!</h3>
+                        </div>
                         <div className="col-lg-2 col-sm-6">
-                            <Card title={"Cliente"} text={response.user} />
+                            <Card title={"Cliente"} text={response.balance} />
                         </div>
                         <div className="col-lg-2 col-sm-6">
                             <Card title={"Valor Investido"} text={response.amountInvested} />
@@ -197,21 +204,21 @@ export const Home = () => {
                             </div>
                         </div>
                         <div className="col-lg-3 col-sm-6 d-flex flex-column">
-                            <CardList title={"Operações Realizadas"} ops={response.completedOperations} />
+                            <CardList classeProps={`pequeno`}  title={"Operações Realizadas"} ops={response.completedOperations} />
                         </div>
                         <div className="col-lg-3 col-sm-6 d-flex flex-column">
-                            <CardList title={"Operações em Andamento"} ops={response.onGoingOperations} />
+                            <CardList classeProps={`pequeno`} title={"Operações em Andamento"} ops={response.onGoingOperations} />
                         </div>
                         <div className="col-lg-3 col-sm-6 d-flex flex-column">
-                            <CardList title={"Resultado Esperado"} ops={response.expectedOutcome} />
+                            <CardList classeProps={`pequeno`} title={"Resultado Esperado"} ops={response.expectedOutcome} />
                         </div>
                     </div>
                     <div className="row flex" style={rowStyle}>
                         <div className="col-lg-6 col-sm-12">
-                            <BarChart props={results.periodResults} />
+                            <BarChart classeProps={`barras`} props={results.periodResults} />
                         </div>
                         <div className="col-lg-6 col-sm-12">
-                            <News title={"Informações"} props={news} />
+                            <News classeProps={`noticias`} title={"Informações"} props={news} />
                         </div>
                     </div>
                 </div>

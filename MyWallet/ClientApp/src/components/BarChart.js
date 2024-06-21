@@ -1,7 +1,7 @@
 ﻿import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 
-const BarChart = ({ props }) => {
+const BarChart = ({ props, classeProps }) => {
     const chartRef = useRef(null);
     const myChartRef = useRef(null);
 
@@ -42,7 +42,7 @@ const BarChart = ({ props }) => {
     }, [props]);
 
     return (
-        <div className="card">
+        <div className={`card ${classeProps}`}>
             <div className="card-body">
                 <h5 className="card-title">Desempenho no Período (R$)</h5>
                 <canvas ref={chartRef} style={{ maxWidth: '100%', maxHeight: '300px' }}></canvas>

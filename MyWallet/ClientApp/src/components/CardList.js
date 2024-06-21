@@ -4,11 +4,11 @@ export class CardList extends Component {
     static displayName = CardList.name;
 
     render() {
-        const { title, ops } = this.props;
+        const { title, ops, classeProps } = this.props;
         
         return (
             
-            <div className="card">
+            <div className={`card ${classeProps}`}>
                 <div className="card-body">
                     <h5 className="card-title">{title}</h5>
 
