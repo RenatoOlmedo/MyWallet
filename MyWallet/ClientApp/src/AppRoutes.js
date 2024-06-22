@@ -4,6 +4,7 @@ import { FetchData } from "./components/FetchData";
 import { Home } from "./components/Home";
 import {UserWallet} from './components/Wallets/UserWallet'
 import { News } from './components/News/News';
+import { Balance } from './components/Balance/Balance';
 
 const AppRoutes = [
   {
@@ -29,6 +30,10 @@ const AppRoutes = [
     path: '/news',
     requireAuth: true,
     element: <News />
+  }, {
+    path: '/balance/:id',
+    requireAuth: true,
+    element: <Balance />
   },
   ...ApiAuthorzationRoutes
 ];

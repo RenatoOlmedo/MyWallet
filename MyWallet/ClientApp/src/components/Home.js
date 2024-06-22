@@ -47,7 +47,7 @@ export const Home = () => {
     const [modalOpen, setModalOpen] = useState(false)
     const [news, setNews] = useState()
     const [results, setResults] = useState();
-    const [user, setUser] = useState()
+    const [User, setUser] = useState()
     const [resultsCarregado, setResultsCarregado] = useState(false)
     const navigate = useNavigate()
 
@@ -172,10 +172,10 @@ export const Home = () => {
                 <div>
                     <div className="row align-items-center">
                         <div className='col-12'>
-                            <h3 className='h3-user text-black mb-3'>Bem vindo {user.name}!</h3>
+                            <h3 className='h3-user text-black mb-3'>Bem vindo {User.name}!</h3>
                         </div>
                         <div className="col-lg-2 col-sm-6">
-                            <Card title={"Cliente"} text={response.balance} />
+                            <Card title={"Balanço"} text={response.balance} />
                         </div>
                         <div className="col-lg-2 col-sm-6">
                             <Card title={"Valor Investido"} text={response.amountInvested} />

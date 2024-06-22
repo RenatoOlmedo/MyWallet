@@ -35,6 +35,7 @@ export const News = () =>{
         console.log('Mudou', mudancaEstado)
         async function initialize(){
             var noticias = await getNews();
+            console.log(noticias)
             setNews(noticias);
         }
         initialize()

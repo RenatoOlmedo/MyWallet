@@ -53,6 +53,9 @@ export const UserWallet = () =>{
                     <div className="col-12">
                         <a href="/" className="-btn-voltar text-white">Voltar</a>
                     </div>
+                    <div className="col-12 text-end">
+                        <a href={`balance/${id}`} className="btn-danger btn text-white">Adicionar Balanço</a>
+                    </div>
                     <div class="col-12">
                         <h1 class="text-center" >Carteira de {userName}</h1>
                     </div>
