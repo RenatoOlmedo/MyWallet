@@ -99,6 +99,9 @@ code {
       }
     }
 
+    .h3-user{
+      color: white !important;
+    }
 
   .fundo-body{
     background-color:$corfundo ;
@@ -116,7 +119,7 @@ code {
     
   }
 
-  .form-select{
+  .select-calendar{
     background-color: #1e1e1e;
     color: #fff;
     background-image: url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3e%3cpath fill=%27none%27 stroke=%27%23ffffff%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%272%27 d=%27M2 5l6 6 6-6%27/%3e%3c/svg%3e');
@@ -231,4 +234,47 @@ thead, tbody, tfoot, tr, td, th {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: normal;
+}
+
+.card{
+  overflow-y: auto;
+  &.pequeno{
+    max-height: 250px;
+  }
+
+  &.barra,&.noticias{
+    max-height: 380px;
+  }
+
+    /* Estilos para a barra de rolagem */
+    &::-webkit-scrollbar {
+      width: 10px; /* largura da barra de rolagem */
+    }
+  
+    /* Estilo da alça (thumb) da barra de rolagem */
+    &::-webkit-scrollbar-thumb {
+      background-color: #999; /* Cor da alça */
+      border-radius: 5px; /* Borda arredondada */
+    }
+  
+    /* Estilo ao passar o mouse sobre a alça */
+    &::-webkit-scrollbar-thumb:hover {
+      background-color: #999; /* Cor ao passar o mouse */
+    }
+  
+    /* Estilo da pista (track) da barra de rolagem */
+    &::-webkit-scrollbar-track {
+      background-color: #f0f0f0; /* Cor de fundo da pista */
+      border-radius: 5px; /* Borda arredondada */
+    }
+  
+    /* Estilo ao passar o mouse sobre a pista */
+    &::-webkit-scrollbar-track:hover {
+      background-color: #e0e0e0; /* Cor de fundo ao passar o mouse */
+    }
+  
+    /* Estilo da borda da barra de rolagem */
+    &::-webkit-scrollbar-corner {
+      background-color: transparent; /* Cor do canto */
+    }
 }
