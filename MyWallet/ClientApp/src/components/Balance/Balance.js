@@ -21,14 +21,15 @@ export const Balance = () =>{
 
     async function getBalance(){
         const response = await fetch(`Wallet/GetHeritage?userId=${id}`)
-        const data = response.data
+        const data = response.json()
         return data
     }
     useEffect(()=>{
         
         async function initialize(){
             var resposta = await getBalance()
-            if(resposta == undefined){
+            console.log(`resposta`, resposta)
+            if(resposta.heritageId == null){
                 setJatem(false)
             }
             else{
@@ -67,11 +68,9 @@ export const Balance = () =>{
             <>
                    <div className="container">
                         <div className="row justify-content-center">
-                            <div className="col-12 mb-5 text-end">
-                                <button onClick={() => { abreModal(newBalance, 'add') }} className="btn btn-primary">Adicionar Balanco</button>
-                            </div>
+     
                             <div className="col-12">
-                                <h1 className="text-center h3-user">Balanço - {balance.balance}</h1>
+                                <h1 className="text-center h3-user">Caixa - R$ {balance.balance}</h1>
                                 <div className="table-responsive">
                                     <table className="table table-striped table-hover mt-5">
                                         <thead>

@@ -53,17 +53,25 @@ export const UserWallet = () =>{
                     <div className="col-12">
                         <a href="/" className="-btn-voltar text-white">Voltar</a>
                     </div>
-                    <div className="col-12 text-end">
-                        <a href={`balance/${id}`} className="btn-danger btn text-white">Adicionar Balanço</a>
-                    </div>
+                 
                     <div class="col-12">
                         <h1 class="text-center" >Carteira de {userName}</h1>
                     </div>
-                    <div className="col-12 text-end mt-3">
+
+                    <div className="row justify-content-end align-items-center">
+
+                
+                    <div className="col-lg-2 col-md-4 col-12 text-end">
+                        <a href={`balance/${id}`} className="btn-danger btn text-white">Adicionar patrímonio</a>
+                    </div>
+                   
+
+                    <div className="col-lg-1 col-md-3 col-12 text-end  mt-4 mt-md-0">
                             <button className="btn btn-primary" onClick={() =>{
                                 setTipoModal(`adicionar`);
                                 setModalOpen(true)
                             }}>Adicionar</button>
+                    </div>
                     </div>
                     <div class="col-12">
                        <div class="table-responsive">

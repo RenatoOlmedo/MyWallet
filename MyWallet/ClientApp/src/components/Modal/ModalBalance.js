@@ -52,7 +52,7 @@ export const ModalBalace = ({ balance, onClose, typeProps, mudanca, open, userId
                     {newBalance.investments.map((investment, index) => (
                         <>
                         <div className="row my-3">
-                        <div key={index} className="col-6 ">
+                        <div key={index} className="col-md-6 col-12">
                             <div className="-input-group">
                                 <label className="form-label" htmlFor={`nameOperation_${index}`}>
                                     Nome da operação
@@ -74,7 +74,7 @@ export const ModalBalace = ({ balance, onClose, typeProps, mudanca, open, userId
                             </div>
                         </div>
 
-                        <div key={index} className="col-6 ">
+                        <div key={index} className="col-md-6 col-12">
                             <label className="form-label" htmlFor={`resultOperation_${index}`}>
                                     Resultado da operação
                                 </label>
@@ -164,8 +164,6 @@ setQtdeInvestments(qtedeInvestments+1)
         e.preventDefault()
     
         console.log(newBalance);
-        return
-
 
         const response = await fetch(`Wallet/CreateHeritage?userId=${userId}`,{
             method:"POST",
@@ -180,12 +178,14 @@ setQtdeInvestments(qtedeInvestments+1)
                 setRetornoModal({open:false})
             },2000)
             mudanca(balancos)
+            fecharModal()
         }
         else{
             setRetornoModal({cor:'danger', texto:'Erro ao cadastrar investimento',open:true})
             setTimeout(function(){
                 setRetornoModal({open:false})
             },2000)
+
         }
     }
 
