@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { RetornoModal } from "./RetornoModal";
 
 
-export const ModalWallet = ({userProps,userId,yearProps, monthProps, open,onClose, type}) =>{
+export const ModalWallet = ({userProps,userId,yearProps, monthProps, open,onClose, type, mudanca}) =>{
 
     const [userSe, setUser] = useState(userProps);
     const [opened, setOpened] = useState(open);
@@ -96,6 +96,7 @@ export const ModalWallet = ({userProps,userId,yearProps, monthProps, open,onClos
                 setTimeout(function(){
                     setRetornoModal({open:false})
                 },2000)
+                mudanca(`ok`)
             }
         }catch{
             setCarregado(false)

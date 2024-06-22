@@ -13,6 +13,7 @@ export const UserWallet = () =>{
     const [year, setYear] = useState("")
     const [month, setMonth] = useState("")
     const [tipoModal, setTipoModal] = useState("")
+    const [mudou, setMudou] = useState()
     
 
     const {id} = useParams();
@@ -24,7 +25,11 @@ export const UserWallet = () =>{
         console.log("carteira", res)
         setCarregado(true)
        })
-    },[id])
+    },[id, mudou])
+
+    const retornaMudanca = (mudanca) =>{
+        setMudou(mudou +1)
+    }
 
 
     function abreModal(year, month, tipo){
@@ -53,7 +58,7 @@ export const UserWallet = () =>{
             <ModalBalace  onClose={fecharModalBalance} open={modalBalance} userId={id}></ModalBalace>
             {modalOpen ? 
             <>
-            <ModalWallet type={tipoModal} userProps={userName} userId={id} yearProps={year} monthProps={month} open={modalOpen} onClose={fecharModal}></ModalWallet> 
+            <ModalWallet mudanca={retornaMudanca} type={tipoModal} userProps={userName} userId={id} yearProps={year} monthProps={month} open={modalOpen} onClose={fecharModal}></ModalWallet> 
             </>
             :
             ""
