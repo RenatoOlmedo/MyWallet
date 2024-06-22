@@ -31,22 +31,71 @@ export const ModalBalace = ({ onClose, open, userId }) => {
         async function initialize(){
             var resposta = await getBalance()
             console.log(`resposta`, resposta)
-            if(resposta.balance == null){
-                setJatem(false)
-            }
+            if(resposta.investments == null){
+                var novoInvestimento = [{
+                    operation:"",
+                    result:""
+                }]
+                setNewBalance(antiga => ({
+                    ...antiga,
+                    investments:novoInvestimento
+                }))
+            }   
             else{
-                setBalance(resposta)
-                setJatem(true)
+                setNewBalance(resposta)
             }
         }
         initialize()
     }, [userId,open]);
 
 
-    let conteudoModal = null;
-    if (!jatem) {
-        conteudoModal = (
-            <div className="col-12">    
+
+
+    function fecharModal() {
+        setModalOpen(false);
+        onClose();
+    }
+
+    async function CriaInvestment(e, tipo){
+        e.preventDefault()
+    
+        console.log(newBalance);
+
+        const response = await fetch(`Wallet/CreateHeritage?userId=${userId}`,{
+            method:"POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body:JSON.stringify(newBalance)
+        })
+        if(response.ok){
+            setRetornoModal({cor:'success', texto:'Investimento cadastrado com sucesso',open:true})
+            setTimeout(function(){
+                setRetornoModal({open:false})
+            },2000)
+          
+            fecharModal()
+        }
+        else{
+            setRetornoModal({cor:'danger', texto:'Erro ao cadastrar investimento',open:true})
+            setTimeout(function(){
+                setRetornoModal({open:false})
+            },2000)
+
+        }
+    }
+
+    return (
+        <>
+            <RetornoModal corProps={retornoModal.cor} textoProps={retornoModal.texto} openProps={retornoModal.open} />
+            <div className={`modal ${open ? "" : "fechada"}`}>
+                <div className="fecha-modal" onClick={fecharModal}></div>
+                <div className="container conteudo-modal p-lg-5 py-3">
+                    <div className="row justify-content-center">
+                        <div className="col-12 text-end position-relative">
+                            <div onClick={fecharModal} className="close"></div>
+                        </div>
+                        <div className="col-12">    
             <h3 className="text-black text-center mb-3">Criar caixa</h3>            
                 <form onSubmit={CriaInvestment}>
 
@@ -153,61 +202,6 @@ setQtdeInvestments(qtedeInvestments+1)
                 </form>
             
             </div>
-        );
-    }
-    else{
-        conteudoModal = <>
-
-        </>
-    }
-
-
-
-    function fecharModal() {
-        setModalOpen(false);
-        onClose();
-    }
-
-    async function CriaInvestment(e, tipo){
-        e.preventDefault()
-    
-        console.log(newBalance);
-
-        const response = await fetch(`Wallet/CreateHeritage?userId=${userId}`,{
-            method:"POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body:JSON.stringify(newBalance)
-        })
-        if(response.ok){
-            setRetornoModal({cor:'success', texto:'Investimento cadastrado com sucesso',open:true})
-            setTimeout(function(){
-                setRetornoModal({open:false})
-            },2000)
-          
-            fecharModal()
-        }
-        else{
-            setRetornoModal({cor:'danger', texto:'Erro ao cadastrar investimento',open:true})
-            setTimeout(function(){
-                setRetornoModal({open:false})
-            },2000)
-
-        }
-    }
-
-    return (
-        <>
-            <RetornoModal corProps={retornoModal.cor} textoProps={retornoModal.texto} openProps={retornoModal.open} />
-            <div className={`modal ${open ? "" : "fechada"}`}>
-                <div className="fecha-modal" onClick={fecharModal}></div>
-                <div className="container conteudo-modal p-lg-5 py-3">
-                    <div className="row justify-content-center">
-                        <div className="col-12 text-end position-relative">
-                            <div onClick={fecharModal} className="close"></div>
-                        </div>
-                        {conteudoModal}
                     </div>
                 </div>
             </div>
