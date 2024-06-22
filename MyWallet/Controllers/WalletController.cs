@@ -162,26 +162,10 @@ public class WalletController : ControllerBase
             return BadRequest(e);
         }
     }
-    
+
     [HttpPost]
     [Route("CreateHeritage")]
     public async Task<IActionResult> CreateInvestments([FromQuery] string userId, [FromBody] HeritageDTO heritage)
-    {
-        try
-        {
-            await _walletService.CreateHeritageByUserAsync(userId, heritage);
-
-            return Ok();
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e);
-        }
-    }
-    
-    [HttpPut]
-    [Route("UpdateHeritage")]
-    public async Task<IActionResult> UpdateInvestments([FromQuery] string userId, [FromBody] HeritageDTO heritage)
     {
         try
         {

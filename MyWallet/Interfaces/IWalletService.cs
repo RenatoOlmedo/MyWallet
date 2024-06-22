@@ -13,5 +13,4 @@ public interface IWalletService
     Task<List<PeriodResultDTO>> GetPeriodResultByUserAsync(string userId);
     Task<HeritageDTO> GetHeritageByUserAsync(string userId);
     Task CreateHeritageByUserAsync(string userId, HeritageDTO heritage);
-    Task UpdateHeritageByUserAsync(string userId, HeritageDTO heritage);
 }
