@@ -145,7 +145,9 @@ export const Home = () => {
        
 
         initialize();
-        fetchUserData();
+        if(isAdmin){
+            fetchUserData();
+        }
         fetchNews();
     }, [valorReducer.ano, valorReducer.mes]);
 
@@ -175,7 +177,7 @@ export const Home = () => {
                             <h3 className='h3-user text-black mb-3'>Bem vindo {User.name}!</h3>
                         </div>
                         <div className="col-lg-2 col-sm-6">
-                            <Card title={"Balanço"} text={response.balance} />
+                            <Card title={"Caixa"} text={response.balance} />
                         </div>
                         <div className="col-lg-2 col-sm-6">
                             <Card title={"Valor Investido"} text={response.amountInvested} />
