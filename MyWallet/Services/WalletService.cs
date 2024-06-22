@@ -595,12 +595,6 @@ public class WalletService : IWalletService
 
         if (heritage is null)
             return new HeritageDTO();
-        
-        var heritageDto = new HeritageDTO
-        {
-            HeritageId = heritage.Id,
-            Balance = heritage.Balance
-        };
 
         var investmentsList = new List<InvestmentDTO>();
         
@@ -609,8 +603,12 @@ public class WalletService : IWalletService
             Operation = x.Operation,
             Result = x.Result
         }));
-
-        heritageDto.Investments = investmentsList;
+        
+        var heritageDto = new HeritageDTO
+        {
+            Balance = heritage.Balance,
+            Investments = investmentsList
+        };
         
         return heritageDto;
     }
@@ -625,7 +623,7 @@ public class WalletService : IWalletService
         var heritageToUpdate = await _db.Heritage
             .Include(i => i.Investments)
             .FirstOrDefaultAsync(x => 
-                x.Id == heritage.HeritageId);
+                x.User == user);
 
         var newInvestments = new List<Investments>();
         
