@@ -1,16 +1,19 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { ModalWallet } from "../Modal/ModalWallet";
+import { ModalBalace } from "../Modal/ModalBalance";
 
 
 export const UserWallet = () =>{
     const [wallet, setWallet] = useState(null);
     const [carregado, setCarregado] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
+    const [modalBalance, setModalBalance] = useState(false);
     const [userName, setUserName] = useState("")
     const [year, setYear] = useState("")
     const [month, setMonth] = useState("")
     const [tipoModal, setTipoModal] = useState("")
+    
 
     const {id} = useParams();
 
@@ -23,6 +26,7 @@ export const UserWallet = () =>{
        })
     },[id])
 
+
     function abreModal(year, month, tipo){
         setTipoModal(tipo)
         setYear(year)
@@ -31,6 +35,9 @@ export const UserWallet = () =>{
     }
     function fecharModal() {
         setModalOpen(false);
+    }
+    function fecharModalBalance() {
+        setModalBalance(false);
     }
 
     async function getWallet(id){
@@ -43,8 +50,11 @@ export const UserWallet = () =>{
         <section id="userList">
         { carregado ?
             <>
+            <ModalBalace  onClose={fecharModalBalance} open={modalBalance} userId={id}></ModalBalace>
             {modalOpen ? 
+            <>
             <ModalWallet type={tipoModal} userProps={userName} userId={id} yearProps={year} monthProps={month} open={modalOpen} onClose={fecharModal}></ModalWallet> 
+            </>
             :
             ""
             }
@@ -62,7 +72,7 @@ export const UserWallet = () =>{
 
                 
                     <div className="col-lg-2 col-md-4 col-12 text-end">
-                        <a href={`balance/${id}`} className="btn-danger btn text-white">Adicionar patrímonio</a>
+                        <button onClick={()=> setModalBalance(true)} className="btn-danger btn text-white">Adicionar patrímonio</button>
                     </div>
                    
 

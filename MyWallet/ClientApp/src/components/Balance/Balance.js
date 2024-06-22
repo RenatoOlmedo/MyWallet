@@ -62,7 +62,7 @@ export const Balance = () =>{
 
     return (
         <>
-         <ModalBalace mudanca={recebeMudanca} onClose={fecharModal} open={modalOpen} typeProps={type} balance={newBalance} userId={id}></ModalBalace>
+         <ModalBalace mudanca={recebeMudanca} onClose={fecharModal} open={modalOpen} userId={id}></ModalBalace>
         {
             jaTem ? 
             <>

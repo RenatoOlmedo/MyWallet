@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { RetornoModal } from "./RetornoModal";
 
-export const ModalBalace = ({ balance, onClose, typeProps, mudanca, open, userId }) => {
+export const ModalBalace = ({ onClose, open, userId }) => {
     const [modalOpen, setModalOpen] = useState(false);
-    const [balancos, setBalancos] = useState();
+    const [balance, setBalance] = useState();
     const [retornoModal, setRetornoModal] = useState({
         cor: "",
         texto: "",
@@ -18,15 +18,34 @@ export const ModalBalace = ({ balance, onClose, typeProps, mudanca, open, userId
         }]
     });
 
+    const[jatem, setJatem] = useState(false)
+
+    async function getBalance(){
+        const response = await fetch(`Wallet/GetHeritage?userId=${userId}`)
+        const data = response.json()
+        return data
+    }
+
     useEffect(() => {
-        console.log("balancos", balance);
-        setBalancos(balance);
-    }, [balance, typeProps,userId]);
+
+        async function initialize(){
+            var resposta = await getBalance()
+            console.log(`resposta`, resposta)
+            if(resposta.balance == null){
+                setJatem(false)
+            }
+            else{
+                setBalance(resposta)
+                setJatem(true)
+            }
+        }
+        initialize()
+    }, [userId,open]);
 
 
-    let retornoAdd = null;
-    if (typeProps === "add") {
-        retornoAdd = (
+    let conteudoModal = null;
+    if (!jatem) {
+        conteudoModal = (
             <div className="col-12">    
             <h3 className="text-black text-center mb-3">Criar caixa</h3>            
                 <form onSubmit={CriaInvestment}>
@@ -136,24 +155,13 @@ setQtdeInvestments(qtedeInvestments+1)
             </div>
         );
     }
+    else{
+        conteudoModal = <>
 
-    let retornoUpdate = null;
-    if (typeProps === "update") {
-        // Implementar a lógica de atualização aqui
-        retornoUpdate = <div className="col-12">Formulário de atualização</div>;
+        </>
     }
 
-    let conteudoModal = "";
-    switch (typeProps) {
-        case "update":
-            conteudoModal = retornoUpdate;
-            break;
-        case "add":
-            conteudoModal = retornoAdd;
-            break;
-        default:
-            break;
-    }
+
 
     function fecharModal() {
         setModalOpen(false);
@@ -177,7 +185,7 @@ setQtdeInvestments(qtedeInvestments+1)
             setTimeout(function(){
                 setRetornoModal({open:false})
             },2000)
-            mudanca(balancos)
+          
             fecharModal()
         }
         else{
