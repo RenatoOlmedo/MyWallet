@@ -70,10 +70,10 @@ export const News = () =>{
             <table class="table table-striped table-hover mt-5">
                 <thead>
                     <tr>
-                        <th class="" width="25%" colspan="4">Título</th>
-                        <th class="" width="25%" colspan="4">Notícia</th>
-                        <th class="text-center" width="25%" colspan="4">#</th>
-                        <th class="text-center" width="25%" colspan="4">#</th>
+                        <th class="" width="40%" colspan="4">Título</th>
+                        <th class="" width="40%" colspan="4">Notícia</th>
+                        <th class="text-center" width="10%" colspan="4">#</th>
+                        <th class="text-center" width="10%" colspan="4">#</th>
 
                     </tr>
                     </thead>

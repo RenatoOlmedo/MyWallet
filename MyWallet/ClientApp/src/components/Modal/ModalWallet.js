@@ -238,7 +238,7 @@ const arrayOperations = (<>
             <div className="operations pt-3">
                 <div className="text-start mb-3">
                     {/*<p><strong>Id da operação {wallet.operations[index].operationId}</strong></p>*/}
-                    <label className="form-label" htmlFor={`nameOperation_${index }`}>Nome da operação</label>
+                    <label className="form-label" htmlFor={`nameOperation_${index }`}>Operação</label>
                     <div className="input-group">
                    
                     <input

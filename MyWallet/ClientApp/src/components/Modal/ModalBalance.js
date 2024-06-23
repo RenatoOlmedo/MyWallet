@@ -123,7 +123,7 @@ export const ModalBalace = ({ onClose, open, userId }) => {
                         <div key={index} className="col-md-6 col-12">
                             <div className="-input-group">
                                 <label className="form-label" htmlFor={`nameOperation_${index}`}>
-                                    Nome da operação
+                                    Operação
                                 </label>
                                 <input
                                     className="form-control"
@@ -144,7 +144,7 @@ export const ModalBalace = ({ onClose, open, userId }) => {
 
                         <div key={index} className="col-md-6 col-12">
                             <label className="form-label" htmlFor={`resultOperation_${index}`}>
-                                    Resultado da operação
+                                    Valor Atual
                                 </label>
                             <div className="input-group">
                                   <span class="input-group-text">R$</span>

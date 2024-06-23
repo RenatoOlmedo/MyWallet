@@ -3,7 +3,7 @@
 public class WalletViewDTO
 {
     public string User { get; set; }
-    public string Month { get; set; }
+    public int Month { get; set; }
     public decimal Result { get; set; }
     public List<SimplifiedOperationDTO> CompletedOperations { get; set; }
     public List<SimplifiedOperationDTO> OnGoingOperations { get; set; }

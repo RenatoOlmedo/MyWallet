@@ -77,7 +77,7 @@ export const UserWallet = () =>{
 
                 
                     <div className="col-lg-2 col-md-4 col-12 text-end">
-                        <button onClick={()=> setModalBalance(true)} className="btn-danger btn text-white">Adicionar patrímonio</button>
+                        <button onClick={()=> setModalBalance(true)} className="btn-danger btn text-white">Patrimônio</button>
                     </div>
                    
 
@@ -93,18 +93,18 @@ export const UserWallet = () =>{
                         <table class="table table-striped table-hover mt-5">
                             <thead>
                                 <tr>
-                                    <th class="" width="25%" colspan="4">Resultado</th>
                                     <th class="" width="25%" colspan="4">Mês</th>
                                     <th class="" width="25%" colspan="4">Ano</th>
+                                    <th className="" width="25%" colSpan="4">Resultado</th>
                                     <th class="" width="25%" colspan="4">#</th>
 
                                 </tr>
                                 </thead>
                                 {wallet.map((item, index) =>(
                                     <tr>
-                                        <td colSpan={4}>{item.result}</td>
                                         <td colSpan={4}>{item.month}</td>
                                         <td colSpan={4}>{item.year}</td>
+                                        <td colSpan={4}>{item.result}</td>
                                         <td colSpan={4}>
                                             <button onClick={()=>abreModal(item.year, item.month,'update')} className="btn btn-secondary">Editar</button>
                                         </td>

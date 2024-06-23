@@ -77,7 +77,7 @@ public class WalletService : IWalletService
         var walletDTO = new WalletViewDTO
         {
             User = user.UserName,
-            Month = ((MonthsEnum)wallet.Month).ToString(),
+            Month = wallet.Month,
             Result = result,
             CompletedOperations = completedDto,
             OnGoingOperations = onGoingDto,
