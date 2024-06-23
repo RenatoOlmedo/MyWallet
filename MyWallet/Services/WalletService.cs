@@ -73,18 +73,27 @@ public class WalletService : IWalletService
 
         if (completedDto.Any())
             result = completedDto.Sum(x => x.Result);
+        
+        var walletDTO = new WalletViewDTO
+        {
+            User = user.UserName,
+            Month = ((MonthsEnum)wallet.Month).ToString(),
+            Result = result,
+            CompletedOperations = completedDto,
+            OnGoingOperations = onGoingDto,
+            ExpectedOutcome = expectedDto
+        };
 
-        var walletData = await _db.Wallets
-            .Include(o => o.Operations)
-            .Include(w => w.Withdraw)
-            .Include(d => d.Deposit)
-            .Where(x => x.User == user)
-            .ToListAsync();
+        return walletDTO;
+    }
 
-        var heritage = await _db.Heritage
-            .Include(i => i.Investments)
-            .FirstOrDefaultAsync(u => 
-                u.User == user);
+    public async Task<FixedInfos> GetFixedInfosByUser(string userId)
+    {
+        var user = await _db.Users
+            .FindAsync(userId);
+
+        if (user is null)
+            throw new KeyNotFoundException("Usuário não encontrado!");
         
         var totalDeposits = 0M;
         var totalWithdraws = 0M;
@@ -92,6 +101,11 @@ public class WalletService : IWalletService
         var currentHeritage = 0M;
         var balance = 0M;
 
+        var heritage = await _db.Heritage
+            .Include(i => i.Investments)
+            .FirstOrDefaultAsync(u => 
+                u.User == user);
+        
         if (heritage is not null)
         {
             currentHeritage = heritage.Balance + heritage.Investments
@@ -100,6 +114,12 @@ public class WalletService : IWalletService
             balance = heritage.Balance;
         }
             
+        var walletData = await _db.Wallets
+            .Include(o => o.Operations)
+            .Include(w => w.Withdraw)
+            .Include(d => d.Deposit)
+            .Where(x => x.User == user)
+            .ToListAsync();
 
         foreach (var userWallet in walletData)
         {
@@ -111,25 +131,19 @@ public class WalletService : IWalletService
             
             if(userWallet.Deposit is not null)
                 totalDeposits += userWallet.Deposit.Sum(x => x.Value);
-        }
+        }  
         
-        var walletDTO = new WalletViewDTO
+        var infos = new FixedInfos
         {
-            User = user.UserName,
             Deposit = totalDeposits,
-            Withdraw = totalWithdraws,
-            Profit = profit,
             AmountInvested = totalDeposits - totalWithdraws + profit,
             CurrentHeritage = currentHeritage,
-            Month = ((MonthsEnum)wallet.Month).ToString(),
-            Result = result,
-            CompletedOperations = completedDto,
-            OnGoingOperations = onGoingDto,
-            ExpectedOutcome = expectedDto,
-            Balance = balance
+            Balance = balance,
+            Withdraw = totalWithdraws,
+            Profit = profit
         };
 
-        return walletDTO;
+        return infos;
     }
 
     public async Task<WalletDTO> GetWalletModalByUserAndMonthAsync(string userId, int year, int month)
@@ -573,7 +587,7 @@ public class WalletService : IWalletService
             
             periodDto.Add(new PeriodResultDTO
             {
-                Month = wallet.Month,
+                Month = ((MonthsEnum)wallet.Month).ToString(),
                 Year = wallet.Year,
                 Result = result
             });

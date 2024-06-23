@@ -5,6 +5,7 @@ namespace MyWallet.Interfaces;
 public interface IWalletService
 {
     Task<WalletViewDTO> GetWalletByUserAndMonthAsync(string userId, int year, int month);
+    Task<FixedInfos> GetFixedInfosByUser(string userId);
     Task<WalletDTO> GetWalletModalByUserAndMonthAsync(string userId, int year, int month);
     Task UpdateWalletAsync(WalletDTO wallet);
     Task<WalletListViewDTO> GetWalletListByUserAsync(string userId);

@@ -39,6 +39,28 @@ public class WalletController : ControllerBase
     }
     
     [HttpGet]
+    [Route("GetFixedInfos")]
+    public async Task<IActionResult> GetFixedInfosByUser([FromQuery] string id)
+    {
+        try
+        {
+            var result = await _walletService.GetFixedInfosByUser(id);
+
+            return Ok(result);
+        }
+        catch (KeyNotFoundException e)
+        {
+            Console.WriteLine(e);
+            return NoContent();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return BadRequest(e);
+        }
+    }
+    
+    [HttpGet]
     [Route("GetModal")]
     public async Task<IActionResult> GetWalletModalByUser([FromQuery] string id, [FromQuery] int year, [FromQuery] int month)
     {

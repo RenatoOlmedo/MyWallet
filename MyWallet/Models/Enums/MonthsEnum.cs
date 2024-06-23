@@ -5,38 +5,38 @@ namespace MyWallet.Models.Enums;
 public enum MonthsEnum
 {
     [Description("Janeiro")]
-    Janeiro = 1,
+    Jan = 1,
     
     [Description("Fevereiro")]
-    Fevereiro = 2,
+    Fev = 2,
     
     [Description("Março")]
-    Marco = 3,
+    Mar = 3,
     
     [Description("Abril")]
-    Abril = 4,
+    Abr = 4,
     
     [Description("Maio")]
-    Maio = 5,
+    Mai = 5,
     
     [Description("Junho")]
-    Junho = 6,
+    Jun = 6,
     
     [Description("Julho")]
-    Julho = 7,
+    Jul = 7,
     
     [Description("Agosto")]
-    Agosto = 8,
+    Ago = 8,
     
     [Description("Setembro")]
-    Setembro = 9,
+    Set = 9,
     
     [Description("Outubro")]
-    Outubro = 10,
+    Out = 10,
     
     [Description("Novembro")]
-    Novembro = 11,
+    Nov = 11,
     
     [Description("Dezembro")]
-    Dezembro = 12
+    Dez = 12
 }

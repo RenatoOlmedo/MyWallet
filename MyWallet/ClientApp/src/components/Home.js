@@ -44,6 +44,7 @@ export const Home = () => {
     const [logado, setLogado] = useState(false);
     const valorReducer = useSelector(state => state.valor)
     const [response, setResponse] = useState("")
+    const [fixedResponse, setFixedResponse] = useState("")
     const [modalOpen, setModalOpen] = useState(false)
     const [news, setNews] = useState()
     const [results, setResults] = useState();
@@ -53,13 +54,7 @@ export const Home = () => {
 
 
     const props = {
-        balance:'NÃO HÁ OPERAÇÕES',
         user:response.user,
-        deposit: 'NÃO HÁ OPERAÇÕES',
-        amountInvested: 'NÃO HÁ OPERAÇÕES',
-        currentHeritage: 'NÃO HÁ OPERAÇÕES',
-        withdraw: 'NÃO HÁ OPERAÇÕES',
-        profit: 'NÃO HÁ OPERAÇÕES',
         Month: "Abril",
         result: 'NÃO HÁ OPERAÇÕES',
         completedOperations: [
@@ -73,11 +68,26 @@ export const Home = () => {
         ]
     };
     
+    const fixedProps = {
+        deposit: 0,
+        amountInvested: 0,
+        currentHeritage: 0,
+        withdraw: 0,
+        profit: 0,
+        balance: 0,
+    }
+    
   
     async function getWalletData(userId, valor) {
         const response = await fetch(`/Wallet?id=${userId}&year=${valor.ano}&month=${valor.mes}`);
         return await response.json();
     }
+
+    async function getFixedWalletData(userId, valor) {
+        const response = await fetch(`Wallet/GetFixedInfos?id=${userId}`);
+        return await response.json();
+    }
+    
     async function getResults(userId){
         const result = await fetch(`Wallet/GetPeriodResult?userId=${userId}`)
         const data = await result.json();
@@ -101,18 +111,22 @@ export const Home = () => {
                   
                     try{
                         const walletData = await getWalletData(user.sub, valorReducer);
+                        
                         console.log('response', walletData)
+                        
                     setResponse(walletData);
                     }
                     catch{
                         setResponse(props)
+                        setFixedResponse(props)
                     }
                     console.log('wallet',walletData)
                     
-                        const resultados = await getResults(user.sub)
-                        setResults(resultados)
+                    const resultados = await getResults(user.sub)
+                    const walletfixedData = await getFixedWalletData(user.sub, valorReducer);
                     
-                   
+                    setResults(resultados)
+                    setFixedResponse(walletfixedData);
                 }
                
             } catch (error) {
@@ -140,10 +154,7 @@ export const Home = () => {
             console.log(data)
             setNews(data)
         }
-       
         
-       
-
         initialize();
         if(isAdmin){
             fetchUserData();
@@ -177,22 +188,22 @@ export const Home = () => {
                             <h3 className='h3-user text-black mb-3'>Bem vindo {User.name}!</h3>
                         </div>
                         <div className="col-lg-2 col-sm-6">
-                            <Card title={"Caixa"} text={response.balance} />
+                            <Card title={"Caixa"} text={fixedResponse.balance} />
                         </div>
                         <div className="col-lg-2 col-sm-6">
-                            <Card title={"Valor Investido"} text={response.amountInvested} />
+                            <Card title={"Valor Investido"} text={fixedResponse.amountInvested} />
                         </div>
                         <div className="col-lg-2 col-sm-6">
-                            <Card title={"Depositos"} text={response.deposit} />
+                            <Card title={"Depositos"} text={fixedResponse.deposit} />
                         </div>
                         <div className="col-lg-2 col-sm-6">
-                            <Card title={"Saques"} text={response.withdraw} />
+                            <Card title={"Saques"} text={fixedResponse.withdraw} />
                         </div>
                         <div className="col-lg-2 col-sm-6">
-                            <Card title={"Lucros"} text={response.profit} />
+                            <Card title={"Lucros"} text={fixedResponse.profit} />
                         </div>
                         <div className="col-lg-2 col-sm-6">
-                            <Card title={"Patrimonio atual"} text={response.currentHeritage} />
+                            <Card title={"Patrimonio atual"} text={fixedResponse.currentHeritage} />
                         </div>
                     </div>
                     <div className="row flex" style={rowStyle}>
