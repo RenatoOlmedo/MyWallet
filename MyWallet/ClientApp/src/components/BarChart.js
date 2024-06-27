@@ -5,6 +5,17 @@ const BarChart = ({ props, classeProps }) => {
     const chartRef = useRef(null);
     const myChartRef = useRef(null);
 
+    function valorFormatado(valor){
+        if(valor != undefined){
+            return valor.toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            })
+        }
+        return null
+    }
+
+
     useEffect(() => {
         if (chartRef.current) {
             const labels = props.map(item => item.month);

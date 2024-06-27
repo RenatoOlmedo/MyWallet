@@ -30,7 +30,7 @@ export const ModalNews = ({onClose, open, typeProps, itemProps, mudanca}) =>{
         cleanNews()
         setItem(itemProps)
         setNews(itemProps)
-    },[item, typeProps])
+    },[itemProps, typeProps])
     
     function fecharModal(){
         setModalOpen(false)
@@ -79,6 +79,7 @@ export const ModalNews = ({onClose, open, typeProps, itemProps, mudanca}) =>{
                 setRetornoModal({open:false})
             },2000)
             fecharModal()
+            mudanca()
         }
     }
 

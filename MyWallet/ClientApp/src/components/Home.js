@@ -48,34 +48,34 @@ export const Home = () => {
     const [modalOpen, setModalOpen] = useState(false)
     const [news, setNews] = useState()
     const [results, setResults] = useState();
-    const [User, setUser] = useState()
+    const [User, setUser] = useState(null)
     const [resultsCarregado, setResultsCarregado] = useState(false)
     const navigate = useNavigate()
 
 
-    const props = {
-        user:response.user,
-        Month: "Abril",
-        result: 'NÃO HÁ OPERAÇÕES',
-        completedOperations: [
-            { financialOperation: "", result: 'NÃO HÁ OPERAÇÕES' },
-        ],
-        onGoingOperations: [
-            { financialOperation: "NÃO HÁ OPERAÇÕES", result: 'NÃO HÁ OPERAÇÕES' }
-        ],
-        expectedOutcome: [
-            { financialOperation: "NÃO HÁ OPERAÇÕES", Result: 'NÃO HÁ OPERAÇÕES' }
-        ]
-    };
+    // const props = {
+    //     user:response.user,
+    //     Month: "Abril",
+    //     result: 'NÃO HÁ OPERAÇÕES',
+    //     completedOperations: [
+    //         { financialOperation: "", result: 'NÃO HÁ OPERAÇÕES' },
+    //     ],
+    //     onGoingOperations: [
+    //         { financialOperation: "NÃO HÁ OPERAÇÕES", result: 'NÃO HÁ OPERAÇÕES' }
+    //     ],
+    //     expectedOutcome: [
+    //         { financialOperation: "NÃO HÁ OPERAÇÕES", Result: 'NÃO HÁ OPERAÇÕES' }
+    //     ]
+    // };
     
-    const fixedProps = {
-        deposit: 0,
-        amountInvested: 0,
-        currentHeritage: 0,
-        withdraw: 0,
-        profit: 0,
-        balance: 0,
-    }
+    // const fixedProps = {
+    //     deposit: 0,
+    //     amountInvested: 0,
+    //     currentHeritage: 0,
+    //     withdraw: 0,
+    //     profit: 0,
+    //     balance: 0,
+    // }
     
   
     async function getWalletData(userId, valor) {
@@ -102,31 +102,38 @@ export const Home = () => {
                 const user = await authService.getUser();
                 console.log('User:', user);
                 if (user) {
+                     
                     console.log('user', user)
                     setUser(user)
                     setLogado(true)
                     setUserId(user.sub);
                     const userRoles = await authService.getUserRoles();
                     setIsAdmin(userRoles.includes('Admin'));
-                  
-                    try{
-                        const walletData = await getWalletData(user.sub, valorReducer);
-                        
-                        console.log('response', walletData)
-                        
-                    setResponse(walletData);
-                    }
-                    catch{
-                        setResponse(props)
-                        setFixedResponse(props)
-                    }
-                    console.log('wallet',walletData)
-                    
-                    const resultados = await getResults(user.sub)
-                    const walletfixedData = await getFixedWalletData(user.sub, valorReducer);
-                    
-                    setResults(resultados)
-                    setFixedResponse(walletfixedData);
+                    if(isAdmin){
+                            fetchUserData();
+                        }
+                        else if(user.role == "User"){
+                            try{
+                                const walletData = await getWalletData(user.sub, valorReducer);
+                                
+                                console.log('response', walletData)
+                                
+                            setResponse(walletData);
+                            }
+                            catch{
+                                setResponse([])
+                                setFixedResponse([])
+                            }
+                            console.log('wallet',walletData)
+                            
+                            const resultados = await getResults(user.sub)
+                            const walletfixedData = await getFixedWalletData(user.sub, valorReducer);
+                            
+                            setResults(resultados)
+                            setFixedResponse(walletfixedData);
+                        }
+                      
+                   
                 }
                
             } catch (error) {
@@ -155,12 +162,10 @@ export const Home = () => {
             setNews(data)
         }
         
-        initialize();
-        if(isAdmin){
-            fetchUserData();
-        }
+    //    fetchUserData()
         fetchNews();
-    }, [valorReducer.ano, valorReducer.mes]);
+        initialize( )
+    }, [valorReducer.ano, valorReducer.mes, isAdmin,userId]);
 
     const estiloPersonalizado = {
         flex: '1'
@@ -172,6 +177,16 @@ export const Home = () => {
 
     function fecharModal() {
         setModalOpen(false);
+    }
+
+    function valorFormatado(valor){
+        if(valor != undefined){
+            return valor.toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            })
+        }
+        return null
     }
 
     return (
@@ -188,22 +203,22 @@ export const Home = () => {
                             <h3 className='h3-user text-black mb-3'>Bem vindo {User.name}!</h3>
                         </div>
                         <div className="col-lg-2 col-sm-6">
-                            <Card title={"Caixa"} text={fixedResponse.balance} />
+                            <Card title={"Caixa"} text={valorFormatado(fixedResponse.balance)} />
                         </div>
                         <div className="col-lg-2 col-sm-6">
-                            <Card title={"Valor Investido"} text={fixedResponse.amountInvested} />
+                            <Card title={"Valor Investido"} text={valorFormatado(fixedResponse.amountInvested)} />
                         </div>
                         <div className="col-lg-2 col-sm-6">
-                            <Card title={"Depositos"} text={fixedResponse.deposit} />
+                            <Card title={"Depositos"} text={valorFormatado(fixedResponse.deposit)} />
                         </div>
                         <div className="col-lg-2 col-sm-6">
-                            <Card title={"Saques"} text={fixedResponse.withdraw} />
+                            <Card title={"Saques"} text={valorFormatado(fixedResponse.withdraw)} />
                         </div>
                         <div className="col-lg-2 col-sm-6">
-                            <Card title={"Lucros"} text={fixedResponse.profit} />
+                            <Card title={"Lucros"} text={valorFormatado(fixedResponse.profit)} />
                         </div>
                         <div className="col-lg-2 col-sm-6">
-                            <Card title={"Patrimonio atual"} text={fixedResponse.currentHeritage} />
+                            <Card title={"Patrimonio atual"} text={valorFormatado(fixedResponse.currentHeritage)} />
                         </div>
                     </div>
                     <div className="row flex" style={rowStyle}>
@@ -213,7 +228,7 @@ export const Home = () => {
                                 <Calendar ></Calendar>
                             </div>
                             <div style={estiloPersonalizado}>
-                                <Card title={"Resultado"} text={response.result} />
+                                <Card title={"Resultado"} text={valorFormatado(response.result)} />
                             </div>
                         </div>
                         <div className="col-lg-3 col-sm-6 d-flex flex-column">

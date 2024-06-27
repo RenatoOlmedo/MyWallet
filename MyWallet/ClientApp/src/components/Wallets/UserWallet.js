@@ -13,23 +13,32 @@ export const UserWallet = () =>{
     const [year, setYear] = useState("")
     const [month, setMonth] = useState("")
     const [tipoModal, setTipoModal] = useState("")
-    const [mudou, setMudou] = useState()
+    const [mudou, setMudou] = useState(0)
     
 
     const {id} = useParams();
 
-    useEffect(()=>{
-       var carteira = getWallet(id).then((res)=>{
-        setUserName(res.userName)
-        setWallet(res.walletList)
-        console.log("carteira", res)
-        setCarregado(true)
-       })
-    },[id, mudou])
-
     const retornaMudanca = (mudanca) =>{
         setMudou(mudou +1)
+        console.log(mudanca)
     }
+
+    async function getWallet(id){
+        var response = await fetch(`/Wallet/listWallet?userId=${id}`);
+        var data = response.json()
+        return data;
+    }
+
+    useEffect(()=>{
+        console.log('entrou aqui')
+        getWallet(id).then((res)=>{
+        setUserName(res.userName)
+        setWallet(res.walletList)
+        setCarregado(true)
+       })
+    },[mudou])
+
+   
 
 
     function abreModal(year, month, tipo){
@@ -45,11 +54,7 @@ export const UserWallet = () =>{
         setModalBalance(false);
     }
 
-    async function getWallet(id){
-        var response = await fetch(`/Wallet/listWallet?userId=${id}`);
-        var data = response.json()
-        return data;
-    }
+ 
     return (
         <>
         <section id="userList">
@@ -101,7 +106,7 @@ export const UserWallet = () =>{
                                 </tr>
                                 </thead>
                                 {wallet.map((item, index) =>(
-                                    <tr>
+                                    <tr key={index}>
                                         <td colSpan={4}>{item.month}</td>
                                         <td colSpan={4}>{item.year}</td>
                                         <td colSpan={4}>{item.result}</td>

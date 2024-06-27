@@ -62,6 +62,10 @@ export const News = () =>{
             <ModalNews mudanca={recebeMudanca} onClose={fecharModal} open={modalOpen} typeProps={type} itemProps={newsUpdate} ></ModalNews>
             <div className="container">
             <div className="row justify-content-center">
+            <div className="col-12 mt-5">
+                        <a href="/" className="-btn-voltar text-white">Voltar</a>
+                    </div>
+                 
                 <div className="col-12 mb-5 text-end">
                     <button onClick={()=>{abreModal(modeloNews, 'add')}} className="btn btn-primary">Adicionar notícia</button>
                 </div>
