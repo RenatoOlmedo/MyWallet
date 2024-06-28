@@ -6,7 +6,7 @@ import BarChart from "./BarChart";
 import authService from "./api-authorization/AuthorizeService";
 import Calendar from './Calendar/Calendar';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ModalNews } from './Modal/ModalNews';
 
 const rowStyle = {
@@ -51,6 +51,7 @@ export const Home = () => {
     const [User, setUser] = useState(null)
     const [resultsCarregado, setResultsCarregado] = useState(false)
     const navigate = useNavigate()
+    const {logged} = useParams();
 
 
     // const props = {
@@ -165,7 +166,7 @@ export const Home = () => {
     //    fetchUserData()
         fetchNews();
         initialize( )
-    }, [valorReducer.ano, valorReducer.mes, isAdmin,userId]);
+    }, [valorReducer.ano, valorReducer.mes, isAdmin,userId,logged]);
 
     const estiloPersonalizado = {
         flex: '1'

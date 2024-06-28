@@ -37,7 +37,7 @@ export class Logout extends Component {
       case LogoutActions.LoggedOut:
         this.setState({ isReady: true, message: "You successfully logged out!" });
         // navigate("/Identity/Account/Login")
-        window.location.href="/Identity/Account/Login"
+        window.location.href="/"
         break;
       default:
         throw new Error(`Invalid action '${action}'`);

@@ -6,8 +6,8 @@ export const QueryParameterNames = {
 };
 
 export const LogoutActions = {
-  LogoutCallback: '',
-  Logout: '/',
+  LogoutCallback: 'logout-callback',
+  Logout: 'logout',
   LoggedOut: 'logged-out'
 };
 
@@ -32,7 +32,7 @@ export const ApplicationPaths = {
   Profile: `${prefix}/${LoginActions.Profile}`,
   LogOut: `${prefix}/${LogoutActions.Logout}`,
   LoggedOut: `${prefix}/${LogoutActions.LoggedOut}`,
-  LogOutCallback: `/`,
+  LogOutCallback:`${prefix}/${LogoutActions.LogoutCallback}`,
   IdentityRegisterPath: 'Identity/Account/Register',
   IdentityManagePath: 'Identity/Account/Manage'
 };

@@ -104,6 +104,7 @@ export class AuthorizeService {
 
       await this.userManager.signoutPopup(this.createArguments());
       this.updateState(undefined);
+      
       return this.success(state);
     } catch (popupSignOutError) {
       console.log("Popup signout error: ", popupSignOutError);
@@ -120,6 +121,7 @@ export class AuthorizeService {
   async completeSignOut(url) {
     await this.ensureUserManagerInitialized();
     try {
+      
       const response = await this.userManager.signoutCallback(url);
       this.updateState(null);
       return this.success(response && response.data);

@@ -32,6 +32,7 @@ export class LoginMenu extends Component {
   }
 
   render() {
+    
     const { isAuthenticated, userName } = this.state;
     if (!isAuthenticated) {
       const registerPath = `${ApplicationPaths.Register}`;
